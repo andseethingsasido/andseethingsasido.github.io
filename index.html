@@ -17,7 +17,7 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            cursor: pointer; /* 全页面点击提示手型 */
+            /* 已经移除 body 上的全局 pointer 手型，防止空白区域误导点击 */
         }
 
         /* 2. 图片通用样式修改 */
@@ -30,6 +30,11 @@
             -webkit-user-drag: none;
             margin: 10px 0; /* 上下两张图之间留出 10 像素的全黑空隙 */
         }
+
+        /* 3. 单独为第二张可点击的 GIF 赋予手型提示 */
+        #gifBottom {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -37,13 +42,18 @@
     <!-- 顶层的 GIF -->
     <img id="gifTop" src="and666.gif" alt="Live View Top">
 
-    <!-- 底层的 GIF （已为你精准修改为 and777.gif） -->
+    <!-- 底层的 GIF （点击这张图将会触发跳转） -->
     <img id="gifBottom" src="and777.gif" alt="Live View Bottom">
 
     <script>
-        // 只要点击页面的任何地方，就会立刻丝滑跳转
-        document.body.addEventListener('click', function() {
-            window.location.href = "https://andseethingsasido.github.io/page2/"; 
+        // 取消了全页面点击跳转，改为精准监听第二张 GIF (and777.gif)
+        const gifBottom = document.getElementById('gifBottom');
+        
+        gifBottom.addEventListener('click', function(event) {
+            // 阻止事件冒泡（安全防护）
+            event.stopPropagation();
+            // 精准跳转到指定的新目的地
+            window.location.href = "https://andseethingsasido.github.io/and666/"; 
         });
     </script>
 
