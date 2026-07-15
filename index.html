@@ -1,268 +1,52 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Simple Pong</title>
-  
-  <!-- 【第一步：合并 CSS 样式】用 <style> 标签包裹 -->
-  <style>
-    :root{
-      --bg: #0b1b2b;
-      --panel: #071425;
-      --accent: #00d1ff;
-      --text: #e6f7ff;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <style>
+        /* 全黑背景，并让视频完美居中 */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            cursor: pointer; /* 鼠标悬停时变成“手型”，提示用户可以点击 */
+        }
 
-    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,Segoe UI,Roboto,Arial,sans-serif}
-    html,body{height:100%}
-    body{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background: linear-gradient(180deg,var(--bg),#051223);
-      color:var(--text);
-      padding:24px;
-    }
-    .container{
-      text-align:center;
-      width:860px;
-    }
-    h1{margin-bottom:12px;font-weight:600}
-    canvas{
-      display:block;
-      margin:0 auto;
-      background:linear-gradient(180deg,var(--panel),#062033);
-      border:4px solid rgba(0,0,0,0.25);
-      box-shadow:0 8px 30px rgba(0,0,0,0.5);
-      cursor: none; /* hide default cursor over canvas to better see controls */
-    }
-    .controls, .notes{
-      margin-top:10px;
-      color:rgba(230,247,255,0.85);
-      font-size:14px;
-    }
-  </style>
+        /* 视频样式：自适应屏幕大小，保持比例 */
+        video {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            outline: none;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Simple Pong</h1>
-    <canvas id="pong" width="800" height="500"></canvas>
-    <p class="controls">Controls: Move mouse over canvas or use Up/Down arrows to move the left paddle.</p>
-    <p class="notes">Click the canvas to (re)start. Scores reset on page reload.</p>
-  </div>
 
-  <!-- 【第二步：合并 JS 逻辑】用 <script> 标签包裹 -->
-  <script>
-    (() => {
-      const canvas = document.getElementById('pong');
-      const ctx = canvas.getContext('2d');
+    <!-- 
+      src="video.mp4" 是你的视频文件名（确保和你上传的名字完全一致）
+      loop: 循环播放
+      muted: 静音（现代浏览器规定：只有静音的视频才允许在网页打开时“自动播放”）
+      autoplay: 自动播放
+      playsinline: 防止手机端全屏弹窗播放，保持在网页内
+    -->
+    <video id="myVideo" src="video.mp4" loop muted autoplay playsinline></video>
 
-      const WIDTH = canvas.width;
-      const HEIGHT = canvas.height;
+    <script>
+        // 绑定点击事件：点击网页的任何地方（包括视频本身），就会跳转
+        document.body.addEventListener('click', function() {
+            // 将下方的网址改为你想跳转的“新网页”地址
+            window.location.href = "https://andseethingsasido.github.io/and666/"; 
+        });
+    </script>
 
-      // Paddle configuration
-      const PADDLE_WIDTH = 12;
-      const PADDLE_HEIGHT = 100;
-      const PADDLE_MARGIN = 10;
-      const PLAYER_SPEED = 6; // for keyboard control
-      const AI_SPEED = 4.0; // computer paddle speed
-
-      // Ball configuration
-      const BALL_RADIUS = 8;
-      const BALL_START_SPEED = 5;
-      const SPEED_INCREASE_ON_HIT = 1.05;
-      const MAX_BOUNCE_ANGLE = Math.PI / 3; // max angle from horizontal
-
-      let running = false;
-
-      const player = {
-        x: PADDLE_MARGIN,
-        y: (HEIGHT - PADDLE_HEIGHT) / 2,
-        width: PADDLE_WIDTH,
-        height: PADDLE_HEIGHT,
-        dy: 0,
-        score: 0
-      };
-
-      const computer = {
-        x: WIDTH - PADDLE_WIDTH - PADDLE_MARGIN,
-        y: (HEIGHT - PADDLE_HEIGHT) / 2,
-        width: PADDLE_WIDTH,
-        height: PADDLE_HEIGHT,
-        score: 0
-      };
-
-      const ball = {
-        x: WIDTH / 2,
-        y: HEIGHT / 2,
-        radius: BALL_RADIUS,
-        speed: BALL_START_SPEED,
-        vx: BALL_START_SPEED,
-        vy: 0
-      };
-
-      // Utility
-      function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
-
-      ui = { player, computer, ball };
-
-      function resetBall(direction = null) {
-        ball.x = WIDTH / 2;
-        ball.y = HEIGHT / 2;
-        ball.speed = BALL_START_SPEED;
-        const angle = (Math.random() * 0.6 - 0.3); // small random vertical offset
-        const dir = direction !== null ? direction : (Math.random() < 0.5 ? -1 : 1);
-        ball.vx = dir * ball.speed * Math.cos(angle);
-        ball.vy = ball.speed * Math.sin(angle);
-        running = true;
-      }
-
-      function drawRect(x, y, w, h, color = '#fff') {
-        ctx.fillStyle = color;
-        ctx.fillRect(x, y, w, h);
-      }
-
-      function drawCircle(x, y, r, color = '#fff') {
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.arc(x, y, r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      function drawNet() {
-        const segment = 12;
-        ctx.fillStyle = 'rgba(255,255,255,0.12)';
-        for (let y = 0; y < HEIGHT; y += segment * 2) {
-          ctx.fillRect(WIDTH / 2 - 1, y, 2, segment);
-        }
-      }
-
-      function drawScores() {
-        ctx.fillStyle = '#9feffd';
-        ctx.font = '40px system-ui,Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText(player.score, WIDTH * 0.25, 60);
-        ctx.fillText(computer.score, WIDTH * 0.75, 60);
-      }
-
-      function draw() {
-        ctx.clearRect(0, 0, WIDTH, HEIGHT);
-        drawNet();
-        drawRect(player.x, player.y, player.width, player.height, '#00d1ff');
-        drawRect(computer.x, computer.y, computer.width, computer.height, '#ffd166');
-        drawCircle(ball.x, ball.y, ball.radius, '#ffffff');
-        drawScores();
-      }
-
-      function update() {
-        if (!running) return;
-
-        player.y += player.dy;
-        player.y = clamp(player.y, 0, HEIGHT - player.height);
-
-        const targetY = ball.y - computer.height / 2;
-        if (computer.y + computer.height / 2 < ball.y - 6) {
-          computer.y += AI_SPEED;
-        } else if (computer.y + computer.height / 2 > ball.y + 6) {
-          computer.y -= AI_SPEED;
-        }
-        computer.y = clamp(computer.y, 0, HEIGHT - computer.height);
-
-        ball.x += ball.vx;
-        ball.y += ball.vy;
-
-        if (ball.y - ball.radius <= 0) {
-          ball.y = ball.radius;
-          ball.vy = -ball.vy;
-        } else if (ball.y + ball.radius >= HEIGHT) {
-          ball.y = HEIGHT - ball.radius;
-          ball.vy = -ball.vy;
-        }
-
-        if (ball.x - ball.radius <= player.x + player.width) {
-          if (ball.y >= player.y && ball.y <= player.y + player.height) {
-            const relativeY = (player.y + player.height / 2) - ball.y;
-            const normalized = relativeY / (player.height / 2);
-            const bounceAngle = normalized * MAX_BOUNCE_ANGLE;
-            const direction = 1;
-            ball.speed *= SPEED_INCREASE_ON_HIT;
-            ball.vx = direction * ball.speed * Math.cos(bounceAngle);
-            ball.vy = -ball.speed * Math.sin(bounceAngle);
-            ball.x = player.x + player.width + ball.radius + 0.5;
-          } else if (ball.x - ball.radius < 0) {
-            computer.score += 1;
-            running = false;
-            setTimeout(() => resetBall(1), 700);
-          }
-        }
-
-        if (ball.x + ball.radius >= computer.x) {
-          if (ball.y >= computer.y && ball.y <= computer.y + computer.height) {
-            const relativeY = (computer.y + computer.height / 2) - ball.y;
-            const normalized = relativeY / (computer.height / 2);
-            const bounceAngle = normalized * MAX_BOUNCE_ANGLE;
-            const direction = -1;
-            ball.speed *= SPEED_INCREASE_ON_HIT;
-            ball.vx = direction * ball.speed * Math.cos(bounceAngle);
-            ball.vy = -ball.speed * Math.sin(bounceAngle);
-            ball.x = computer.x - ball.radius - 0.5;
-          } else if (ball.x + ball.radius > WIDTH) {
-            player.score += 1;
-            running = false;
-            setTimeout(() => resetBall(-1), 700);
-          }
-        }
-      }
-
-      function loop() {
-        update();
-        draw();
-        requestAnimationFrame(loop);
-      }
-
-      canvas.addEventListener('mousemove', (e) => {
-        const rect = canvas.getBoundingClientRect();
-        const mouseY = e.clientY - rect.top;
-        player.y = clamp(mouseY - player.height / 2, 0, HEIGHT - player.height);
-      });
-
-      const keys = {};
-      window.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowUp') {
-          player.dy = -PLAYER_SPEED;
-          keys['ArrowUp'] = true;
-        } else if (e.key === 'ArrowDown') {
-          player.dy = PLAYER_SPEED;
-          keys['ArrowDown'] = true;
-        } else if (e.key === ' ' || e.key === 'Spacebar') {
-          running = !running;
-        }
-      });
-
-      window.addEventListener('keyup', (e) => {
-        if (e.key === 'ArrowUp') {
-          keys['ArrowUp'] = false;
-          if (keys['ArrowDown']) player.dy = PLAYER_SPEED;
-          else player.dy = 0;
-        } else if (e.key === 'ArrowDown') {
-          keys['ArrowDown'] = false;
-          if (keys['ArrowUp']) player.dy = -PLAYER_SPEED;
-          else player.dy = 0;
-        }
-      });
-
-      canvas.addEventListener('click', () => {
-        if (!running) {
-          resetBall();
-        }
-      });
-
-      resetBall();
-      loop();
-
-      window._pong = { player, computer, ball, resetBall };
-    })();
-  </script>
 </body>
 </html>
