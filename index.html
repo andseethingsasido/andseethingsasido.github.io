@@ -23,46 +23,49 @@ body { padding-top: 100px; padding-bottom: 24px; }
     left: 0;
     width: 100%;
     height: 80px;
-    background: transparent; /* 完全透明 */
+    background: transparent; /* 初始完全透明 */
     display: flex;
     justify-content: center; /* 确保中间 Logo 居中 */
     align-items: center;
     z-index: 10000; /* 永远置顶 */
     box-sizing: border-box;
     padding: 0 40px;
+    /* 加入背景色过渡 */
+    transition: background 0.3s;
 }
 
-/* 中间核心 Logo */
+/* 中间核心 Logo - 提升 z-index 以在白色菜单上显示 */
 .logo-btn {
     height: 45px;
     cursor: pointer;
     transition: transform 0.3s;
+    position: relative;
+    z-index: 10003;
 }
 .logo-btn:hover {
     transform: scale(1.03);
 }
 
-/* ✟ 菜单包裹容器，用于处理 Hover 逻辑 ✟ */
-.menu-wrapper {
+/* 汉堡菜单按钮（三条杠）- 缩小尺寸 - 提升 z-index */
+.menu-trigger {
     position: absolute;
     right: 40px;
     top: 0;
     height: 80px; /* 与 header 同高 */
     display: flex;
-    align-items: center; /* 垂直居中三条杠 */
+    align-items: center; /* 垂直居中 */
     z-index: 10002;
+    cursor: pointer;
 }
-
-/* 汉堡菜单按钮（三条杠）- 缩小尺寸 */
-.menu-trigger {
+/* 三条杠图标容器 */
+.menu-trigger-icon {
     width: 20px; /* 缩小宽度 */
     height: 14px; /* 缩小高度 */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    cursor: pointer;
 }
-.menu-trigger span {
+.menu-trigger-icon span {
     display: block;
     width: 100%;
     height: 1px; /* 极致纤细的切线 */
@@ -70,45 +73,53 @@ body { padding-top: 100px; padding-bottom: 24px; }
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s, background 0.3s;
 }
 
-/* ✟ 下拉菜单栏 ✟ */
+/* ✟ 横向铺满最顶端的下拉菜单栏 ✟ */
 #dropdown-menu {
     position: absolute;
-    top: 80px; /* 紧贴 header 底部 */
-    right: -20px; /* 往右侧稍微偏移，让主体在杠子下方偏左 */
-    width: 120px; /* 设置合适宽度 */
-    /* 初始隐藏状态：上滑并透明 */
+    top: 0; /* 覆盖最顶端 */
+    left: 0;
+    width: 100%; /* 横着铺满屏幕 */
+    
+    /* 初始隐藏状态：完全上滑并透明 */
     visibility: hidden;
     opacity: 0;
-    transform: translateY(-20px); 
+    transform: translateY(-100%); 
     
-    /* 这里你可以自己上传照片，目前为白色背景 */
+    /* 白色背景 */
     background: #fff; 
-    /* background-image: url('你的照片地址.jpg'); background-size: cover; */
     
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     box-sizing: border-box;
-    /* 上部对齐文字，底部留出余量 */
-    padding: 20px 20px 40px 20px; 
-    z-index: 10001;
+    /* 顶部留出 header 高度的 padding，底部留出余量 */
+    padding: 100px 10% 40px; 
+    z-index: 10001; /* 介于 header 基础和 logo 之间 */
+    display: flex;
+    justify-content: flex-end; /* 内容靠右对齐 */
 }
 
-/* ✟ 核心 Hover 交互逻辑 ✟ */
-/* 当鼠标悬停在包裹容器上时 */
-.menu-wrapper:hover #dropdown-menu {
+/* ✟ 核心 Hover 交互逻辑 (相对于整个 header) ✟ */
+
+/* 当鼠标悬停在顶部 header 区域上时 */
+#header:hover #dropdown-menu {
     visibility: visible;
     opacity: 1;
     transform: translateY(0); /* 滑动下落 */
 }
 
+/* Hover 时顶部 header 整体背景也变白（防止透明带来的断层） */
+/* #header:hover {
+    background: #fff;
+} */
+
 /* Hover 时三条杠变色，适应白色背景菜单 */
-.menu-wrapper:hover .menu-trigger span {
+#header:hover .menu-trigger-icon span {
     background: #000;
 }
 
-/* 三条杠形变为 ✕ 的动态视觉 - 依然保留，作为悬停反馈 */
-.menu-wrapper:hover .menu-trigger span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-.menu-wrapper:hover .menu-trigger span:nth-child(2) { opacity: 0; }
-.menu-wrapper:hover .menu-trigger span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+/* 三条杠形变为 ✕ 的动态视觉 - 依然保留 */
+#header:hover .menu-trigger-icon span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+#header:hover .menu-trigger-icon span:nth-child(2) { opacity: 0; }
+#header:hover .menu-trigger-icon span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
 
 /* 菜单内部按钮载体 */
@@ -116,10 +127,10 @@ body { padding-top: 100px; padding-bottom: 24px; }
     display: flex;
     flex-direction: column;
     gap: 15px;
-    text-align: left; /* 文字左对齐 */
+    text-align: right; /* 文字右对齐 */
 }
 .menu-item {
-    font-size: 14px; /* 调小文字，与三条杠比例一致 */
+    font-size: 14px; /* 小文字 */
     font-weight: 300;
     letter-spacing: 1px;
     color: #666; /* 适应白色背景 */
@@ -130,7 +141,7 @@ body { padding-top: 100px; padding-bottom: 24px; }
 }
 .menu-item:hover {
     color: #000; /* 悬停变深 */
-    transform: translateX(3px); /* 悬停时向右微调 */
+    transform: translateX(-3px); /* 悬停时向左微调 */
 }
 
 /* A-F 3个一组矩阵 */
@@ -166,6 +177,7 @@ body { padding-top: 100px; padding-bottom: 24px; }
 #card img:hover {filter: grayscale(0%)}
 #close {position:absolute;right:12px;top:8px;font-size:20px;font-weight:200;cursor:pointer;color:#888}
 #close:hover {color:#fff}
+
 </style></head>
 <body>
 
@@ -173,21 +185,20 @@ body { padding-top: 100px; padding-bottom: 24px; }
 <div id="header">
     <img src="and.png" class="logo-btn" onclick="location.href='https://andseethingsasido.github.io/'">
     
-    <!-- 菜单包裹容器 -->
-    <div class="menu-wrapper">
-        <!-- 三条杠 -->
-        <div class="menu-trigger">
+    <!-- 汉堡菜单悬停区 -->
+    <div class="menu-trigger">
+        <div class="menu-trigger-icon">
             <span></span>
             <span></span>
             <span></span>
         </div>
-        
-        <!-- ✟ 下拉菜单栏 ✟ -->
-        <div id="dropdown-menu">
-            <div class="menu-links">
-                <div class="menu-item" onclick="location.href='https://andseethingsasido.github.io/and666/'">商品</div>
-                <div class="menu-item" onclick="mask.style.display='flex'">公众号</div>
-            </div>
+    </div>
+    
+    <!-- ✟ 横向铺满全屏下拉菜单栏 ✟ -->
+    <div id="dropdown-menu">
+        <div class="menu-links">
+            <div class="menu-item" onclick="location.href='https://andseethingsasido.github.io/and666/'">商品</div>
+            <div class="menu-item" onclick="mask.style.display='flex'">公众号</div>
         </div>
     </div>
 </div>
@@ -212,7 +223,6 @@ body { padding-top: 100px; padding-bottom: 24px; }
 
 <script>
 gifBottom.onclick=()=>location.href="https://andseethingsasido.github.io/and666/";
-// 移除了 JS 控制菜单点击的代码，现在全部由 CSS Hover 处理
 </script>
 </body>
 </html>
