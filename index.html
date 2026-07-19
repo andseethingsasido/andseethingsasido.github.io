@@ -78,7 +78,6 @@ img{user-select:none;-webkit-user-drag:none}
     box-sizing: border-box;
     z-index: 10001;
     display: flex;
-    /* 🛠 配合右侧 40px 间距，让内容容器完美右对齐 */
     justify-content: flex-end; 
 }
 #dropdown-menu.show {
@@ -108,7 +107,6 @@ img{user-select:none;-webkit-user-drag:none}
     #header { height: 55px; }
     .logo-btn { height: 35px; } 
     .menu-trigger { height: 55px; }
-    /* 🛠 采用绝对像素控粗细，防止高分屏下渲染不均，完美对齐 35px Logo 的重工业量感 */
     .menu-trigger-icon { width: 22px; } 
     .menu-trigger-icon span { height: 2px; margin-bottom: 4px; } 
     .menu-trigger-icon span:last-child { margin-bottom: 0; }
@@ -120,22 +118,24 @@ img{user-select:none;-webkit-user-drag:none}
     display: flex;
     flex-direction: column;
     gap: 20px; 
-    text-align: right; /* 🛠 确保行内文字末尾强行右对齐 */
+    text-align: right; 
 }
 .menu-item {
-    font-size: 15px; 
-    font-weight: 400; 
-    letter-spacing: 4px; 
+    /* 🛠 替换为奢侈品官网常用的简约高级感加粗排版 */
+    font-family: "Cinzel", "Didot", "Helvetica Neue", Arial, -apple-system, sans-serif;
+    font-size: 14px; 
+    font-weight: 600; 
+    letter-spacing: 5px; 
     color: #555; 
     cursor: pointer;
     transition: color 0.3s, transform 0.3s;
     text-transform: uppercase;
     white-space: nowrap;
-    transform-origin: right center; /* 🛠 缩放动画始终锁死右侧边缘 */
+    transform-origin: right center; 
 }
 .menu-item:hover {
     color: #000; 
-    transform: scale(1.05); 
+    transform: scale(1.03); 
 }
 
 /* A-F 矩阵 */
@@ -167,15 +167,22 @@ img{user-select:none;-webkit-user-drag:none}
 /* 弹窗遮罩 */
 #mask {display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);justify-content:center;align-items:center;z-index:100003}
 
-/* 弹出卡片样式 */
+/* 弹出卡片样式 🛠 尺寸缩小二分之一 */
 #card {
     background: #0a0a0c;
-    padding: 30px;
+    padding: 15px;
     border-radius: 0px;
-    border: 1px solid #000; 
+    border: 1px solid #1c1c22; 
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-#card img {width:min(80vw,320px);filter: grayscale(100%); transition: filter 0.3s}
+#card img {
+    width: min(40vw, 160px); /* 🛠 宽度由原来的 320px 缩减至 160px */
+    filter: grayscale(100%); 
+    transition: filter 0.3s;
+}
 #card img:hover {filter: grayscale(0%)}
 </style></head>
 <body>
@@ -192,7 +199,6 @@ img{user-select:none;-webkit-user-drag:none}
         </div>
     </div>
     
-    <!-- 🛠 已修复：删除了重复的多余 id="dropdownMenu" -->
     <div id="dropdown-menu">
         <div class="menu-links">
             <div class="menu-item" onclick="closeMenu();location.href='https://andseethingsasido.github.io/and666/'">商店</div>
