@@ -74,43 +74,39 @@ img{user-select:none;-webkit-user-drag:none}
     top: 0;
     left: 0;
     width: 100%;
-    visibility: hidden;
-    opacity: 0;
     transform: translateY(-100%); 
     background: #fff; 
-    /* 优化过渡曲线：确保收回(transition-out)与展开(transition-in)拥有完全一致的速度与节奏 */
-    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.35s linear, visibility 0.35s linear;
+    /* 🛠 彻底移除 opacity 和 visibility 过渡，只保留单纯的位移，确保上下推拉速度绝对一致且无虚化 */
+    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
     box-sizing: border-box;
     z-index: 10001;
     display: flex;
     justify-content: center; 
 }
 #dropdown-menu.show {
-    visibility: visible;
-    opacity: 1;
     transform: translateY(0);
 }
 
 /* ==========================================================
-   📱 仅移动端生效的独立尺寸 (25px - 5px = 20px)
+   📱 仅移动端生效的独立尺寸 (20px)
    ========================================================== */
 @media (max-width: 768px) {
     body { padding-top: 55px; padding-bottom: 24px; }
     #header { height: 40px; }
-    .logo-btn { height: 20px; } /* 移动端锁定 20px */
+    .logo-btn { height: 20px; } 
     .menu-trigger { height: 40px; }
     .menu-trigger-icon { width: 22px; height: 13px; }
     #dropdown-menu { padding: 65px 40px 35px; }
 }
 
 /* ==========================================================
-   💻 仅 PC 端生效的独立尺寸 (40px - 5px = 35px)
+   💻 仅 PC 端生效的独立尺寸 (35px)
    ========================================================== */
 @media (min-width: 769px) {
     body { padding-top: 80px; padding-bottom: 24px; }
     #gifTop { width: 53%; max-width: 600px; }
     #header { height: 55px; }
-    .logo-btn { height: 35px; } /* PC 端缩短至 35px */
+    .logo-btn { height: 35px; } 
     .menu-trigger { height: 55px; }
     .menu-trigger-icon { width: 22px; height: 14px; }
     #dropdown-menu { padding: 85px 40px 35px; }
@@ -299,7 +295,6 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// 监听滚动：当菜单打开时，如果滑动菜单栏之外的网站区域，菜单栏自动收起
 window.addEventListener('scroll', () => {
     if (menu.classList.contains('show')) {
         closeMenu();
