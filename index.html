@@ -8,8 +8,8 @@
 html,body{margin:0;padding:0;background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;display:flex;flex-direction:column;align-items:center;overflow-y:auto;scroll-behavior:smooth}
 img{user-select:none;-webkit-user-drag:none}
 
-/* 页面顶部内边距同步缩减，适应更紧凑的 Header */
-body { padding-top: 85px; padding-bottom: 24px; }
+/* 页面顶部内边距同步缩减，适应更紧凑的 Header (原 140px) */
+body { padding-top: 60px; padding-bottom: 24px; }
 
 #gifTop{width:80%;max-width:900px;border-radius:6px;box-shadow:0 0 20px rgba(255,255,255,.12);margin:12px 0}
 @media(min-width:769px){#gifTop{width:53%;max-width:600px}}
@@ -22,7 +22,7 @@ body { padding-top: 85px; padding-bottom: 24px; }
     top: 0;
     left: 0;
     width: 100%;
-    height: 65px; /* 标题栏高度同步缩减 */
+    height: 45px; /* 【核心修正】Header 整体高度从 110px 缩减至 45px */
     background: transparent;
     display: flex;
     justify-content: flex-start;
@@ -32,9 +32,9 @@ body { padding-top: 85px; padding-bottom: 24px; }
     padding: 0 40px;
 }
 
-/* 靠左大 Logo - 精准缩小至三分之一 */
+/* 靠左大 Logo - 精准缩小至原先的三分之一 */
 .logo-btn {
-    height: 30px; /* 从 90px 缩小至 30px */
+    height: 25px; /* 【核心修正】Logo 高度由 90px 缩小至 25px */
     width: auto;
     cursor: pointer;
     position: relative;
@@ -55,15 +55,15 @@ body { padding-top: 85px; padding-bottom: 24px; }
     position: absolute;
     right: 40px;
     top: 0;
-    height: 65px; /* 触发区域高度与 header 保持一致 */
+    height: 45px; /* 【核心修正】触发区域高度与最新的 header 高度 45px 完美对齐 */
     display: flex;
     align-items: center;
     z-index: 10002;
     cursor: pointer;
 }
 .menu-trigger-icon {
-    width: 22px;
-    height: 14px;
+    width: 20px; /* 汉堡菜单也等比微缩，更精致 */
+    height: 12px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -97,7 +97,7 @@ body { padding-top: 85px; padding-bottom: 24px; }
     
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     box-sizing: border-box;
-    padding: 95px 40px 45px; /* 顶部内边距同步缩减，防止菜单项掉得太深 */
+    padding: 70px 40px 35px; /* 【核心修正】顶部内边距同步缩减，防止菜单项掉得太深 */
     z-index: 10001;
     display: flex;
     justify-content: center; 
@@ -114,7 +114,7 @@ body { padding-top: 85px; padding-bottom: 24px; }
 .menu-links {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px; /* 间距微调，更紧凑精致 */
     text-align: center; 
 }
 .menu-item {
@@ -168,7 +168,7 @@ body { padding-top: 85px; padding-bottom: 24px; }
 
 <!-- ✟ ERD 顶部导航栏 ✟ -->
 <div id="header">
-    <!-- 靠左大 Logo (高度已调至 30px) -->
+    <!-- 靠左大 Logo (高度已完美等比缩小) -->
     <img src="logo.png" class="logo-btn" id="logoBtn" onclick="location.href='https://andseethingsasido.github.io/'">
     
     <!-- 右侧三条杠 -->
