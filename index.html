@@ -110,20 +110,20 @@ img{user-select:none;-webkit-user-drag:none}
     .menu-trigger-icon { width: 22px; } 
     .menu-trigger-icon span { height: 2px; margin-bottom: 4px; } 
     .menu-trigger-icon span:last-child { margin-bottom: 0; }
-    #dropdown-menu { padding: 95px 40px 45px; } /* 微调了底部留白以适应大字号 */
+    #dropdown-menu { padding: 85px 40px 35px; }
 }
 
 /* 菜单内部按钮载体 */
 .menu-links {
     display: flex;
     flex-direction: column;
-    gap: 24px; /* 字体增大后，稍微拉开字行距，更显高级疏朗 */
+    gap: 20px; 
 }
 .menu-item {
     font-family: "Cinzel", "Didot", "Helvetica Neue", Arial, -apple-system, sans-serif;
-    font-size: 28px; /* 🛠 完美等比例放大一倍（原14px） */
+    font-size: 18px; 
     font-weight: 600; 
-    letter-spacing: 10px; /* 🛠 字间距同步放大一倍（原5px）确保高级感排版不散架 */
+    letter-spacing: 6px; 
     color: #555; 
     cursor: pointer;
     transition: color 0.3s, transform 0.3s;
@@ -168,9 +168,9 @@ img{user-select:none;-webkit-user-drag:none}
 /* 弹出卡片样式 */
 #card {
     background: #0a0a0c;
-    padding: 15px;
+    padding: 35px; 
     border-radius: 0px;
-    border: 1px solid #1c1c22; 
+    border: 1px solid #000; /* 🛠 已修改：卡片外围调整为纯黑色边框 */
     position: relative;
     display: flex;
     justify-content: center;
