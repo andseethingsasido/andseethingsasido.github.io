@@ -25,7 +25,7 @@
         <div class="menu-links">
             <!-- 商店跳转链接 -->
             <span class="menu-item" onclick="window.location.href='https://andseethingsasido.github.io/and666/'">商店</span>
-            <!-- 公众号唤起弹窗 -->
+            <!-- 公众号唤起弹窗：已修改为触发独立的组件弹窗 -->
             <span class="menu-item" onclick="openWeChatCard()">公众号</span>
         </div>
     </nav>
@@ -228,11 +228,21 @@
         }
     });
 
+    // 🔗 智能对接提取出的独立弹窗组件
     function openWeChatCard() {
-        closeMenu();
-        const mask = document.getElementById('mask');
-        if (mask) {
-            mask.style.display = 'flex';
+        closeMenu(); // 先收起下拉菜单
+        
+        // 优先匹配您最新提取的弹窗组件 id="qrcodeModal"
+        const newModal = document.getElementById('qrcodeModal');
+        if (newModal) {
+            newModal.classList.add('active');
+            return;
+        }
+
+        // 兜底兼容老系统里可能存在的 id="mask"
+        const oldMask = document.getElementById('mask');
+        if (oldMask) {
+            oldMask.style.display = 'flex';
         }
     }
 </script>
