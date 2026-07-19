@@ -25,24 +25,30 @@ body { padding-top: 140px; padding-bottom: 24px; }
     height: 110px;
     background: transparent;
     display: flex;
-    justify-content: flex-start; /* 1. 改为左对齐，让 Logo 靠左 */
+    justify-content: flex-start;
     align-items: center;
     z-index: 10000;
     box-sizing: border-box;
     padding: 0 40px;
 }
 
-/* 靠左大 Logo */
+/* 靠左大 Logo - 替换为 logo.png */
 .logo-btn {
     height: 90px;
     width: auto;
     cursor: pointer;
-    transition: transform 0.3s;
     position: relative;
     z-index: 10003;
+    /* 引入滤镜过渡，用于反差色平滑切换 */
+    transition: transform 0.3s, filter 0.3s; 
 }
 .logo-btn:hover {
     transform: scale(1.02);
+}
+
+/* 菜单激活时，Logo 变为反差色 */
+.logo-btn.active {
+    filter: invert(1);
 }
 
 /* 右侧汉堡菜单悬停区 */
@@ -83,7 +89,7 @@ body { padding-top: 140px; padding-bottom: 24px; }
     left: 0;
     width: 100%;
     
-    /* 初始完全缩回并隐藏 */
+    /* 初始完全上滑隐藏 */
     visibility: hidden;
     opacity: 0;
     transform: translateY(-100%); 
@@ -95,7 +101,7 @@ body { padding-top: 140px; padding-bottom: 24px; }
     padding: 130px 40px 50px; /* 留出下方舒适的余量空间 */
     z-index: 10001;
     display: flex;
-    justify-content: center; /* 3. 菜单内容完美居中铺满 */
+    justify-content: center; 
 }
 
 /* 激活状态下的菜单栏样式 */
@@ -110,21 +116,21 @@ body { padding-top: 140px; padding-bottom: 24px; }
     display: flex;
     flex-direction: column;
     gap: 20px;
-    text-align: center; /* 3. 按钮文字水平居中 */
+    text-align: center; 
 }
 .menu-item {
-    font-size: 22px; /* 3. 字体显著放大 */
-    font-weight: 600; /* 3. 字重加粗 */
-    letter-spacing: 3px; /* 高级独立站呼吸感字间距 */
-    color: #555; /* 优雅深灰，悬停突显 */
+    font-size: 15px; /* 缩小了三分之一，精细内敛 */
+    font-weight: 400; /* 调细字重 */
+    letter-spacing: 4px; /* 保持高级的字母呼吸间距 */
+    color: #555; 
     cursor: pointer;
     transition: color 0.3s, transform 0.3s;
     text-transform: uppercase;
     white-space: nowrap;
 }
 .menu-item:hover {
-    color: #000; /* 悬停变为纯黑 */
-    transform: scale(1.05); /* 悬停时微微放大 */
+    color: #000; 
+    transform: scale(1.05); 
 }
 
 /* A-F 矩阵 */
@@ -163,8 +169,8 @@ body { padding-top: 140px; padding-bottom: 24px; }
 
 <!-- ✟ ERD 顶部导航栏 ✟ -->
 <div id="header">
-    <!-- 左对齐放大 Logo -->
-    <img src="and.png" class="logo-btn" onclick="location.href='https://andseethingsasido.github.io/'">
+    <!-- 1. 替换为 logo.png -->
+    <img src="logo.png" class="logo-btn" id="logoBtn" onclick="location.href='https://andseethingsasido.github.io/'">
     
     <!-- 右侧三条杠 -->
     <div class="menu-trigger" id="menuTrigger">
@@ -209,34 +215,70 @@ body { padding-top: 140px; padding-bottom: 24px; }
 gifBottom.onclick=()=>location.href="https://andseethingsasido.github.io/and666/";
 
 // ==========================================
-// 🛠️ 先锋极简防断联悬停引擎（纯原生 JS）
+// 🛠️ 交互控制引擎
 // ==========================================
 const trigger = document.getElementById('menuTrigger');
 const menu = document.getElementById('dropdown-menu');
+const logo = document.getElementById('logoBtn');
 
 let isHoveringTrigger = false;
 let isHoveringMenu = false;
+let isHoveringLogo = false;
+let isClickOpen = false; // 标记是否是通过点击打开的
 
-// 检查是否应当关闭菜单
+function openMenu() {
+    menu.classList.add('show');
+    trigger.classList.add('active');
+    logo.classList.add('active'); // Logo 变反差色
+}
+
+function closeMenu() {
+    menu.classList.remove('show');
+    trigger.classList.remove('active');
+    logo.classList.remove('active'); // Logo 恢复原色
+    isClickOpen = false;
+}
+
 function checkMenuStatus() {
-    // 采用 setTimeout 缓冲，给鼠标提供跨越临界缝隙的顺滑物理体验
+    // 缓冲缝隙体验
     setTimeout(() => {
-        if (!isHoveringTrigger && !isHoveringMenu) {
-            menu.classList.remove('show');
-            trigger.classList.remove('active');
+        if (!isHoveringTrigger && !isHoveringMenu && !isHoveringLogo && !isClickOpen) {
+            closeMenu();
         }
     }, 50);
 }
 
+// 2. 监听 Logo 触碰（悬停不取消）
+logo.addEventListener('mouseenter', () => {
+    isHoveringLogo = true;
+    if (menu.classList.contains('show')) {
+        openMenu();
+    }
+});
+logo.addEventListener('mouseleave', () => {
+    isHoveringLogo = false;
+    checkMenuStatus();
+});
+
 // 监听三条杠触碰
 trigger.addEventListener('mouseenter', () => {
     isHoveringTrigger = true;
-    menu.classList.add('show');
-    trigger.classList.add('active');
+    openMenu();
 });
 trigger.addEventListener('mouseleave', () => {
     isHoveringTrigger = false;
     checkMenuStatus();
+});
+
+// 4. 点击三条杠逻辑（切换开关状态）
+trigger.addEventListener('click', (e) => {
+    e.stopPropagation(); // 阻止事件冒泡
+    if (menu.classList.contains('show') && isClickOpen) {
+        closeMenu();
+    } else {
+        isClickOpen = true;
+        openMenu();
+    }
 });
 
 // 监听白色菜单栏触碰
@@ -246,6 +288,13 @@ menu.addEventListener('mouseenter', () => {
 menu.addEventListener('mouseleave', () => {
     isHoveringMenu = false;
     checkMenuStatus();
+});
+
+// 点击主页空白处时，如果菜单是点击打开的，则自动收起
+document.addEventListener('click', (e) => {
+    if (isClickOpen && !menu.contains(e.target) && !trigger.contains(e.target)) {
+        closeMenu();
+    }
 });
 </script>
 </body>
