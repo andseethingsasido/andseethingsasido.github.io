@@ -8,8 +8,8 @@
 html,body{margin:0;padding:0;background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;display:flex;flex-direction:column;align-items:center;overflow-y:auto;scroll-behavior:smooth}
 img{user-select:none;-webkit-user-drag:none}
 
-/* 为了给固定顶部栏留出空间，页面主体加一个 top padding */
-body { padding-top: 100px; padding-bottom: 24px; }
+/* 1. 增加页面顶部内边距，适应加高的 Header */
+body { padding-top: 130px; padding-bottom: 24px; }
 
 #gifTop{width:80%;max-width:900px;border-radius:6px;box-shadow:0 0 20px rgba(255,255,255,.12);margin:12px 0}
 @media(min-width:769px){#gifTop{width:53%;max-width:600px}}
@@ -22,21 +22,23 @@ body { padding-top: 100px; padding-bottom: 24px; }
     top: 0;
     left: 0;
     width: 100%;
-    height: 80px;
-    background: transparent; /* 初始完全透明 */
+    /* 1. 将 Header 高度从 80px 增加到 110px 以容纳放大的 Logo */
+    height: 110px;
+    background: transparent;
     display: flex;
-    justify-content: center; /* 确保中间 Logo 居中 */
+    justify-content: center;
     align-items: center;
-    z-index: 10000; /* 永远置顶 */
+    z-index: 10000;
     box-sizing: border-box;
     padding: 0 40px;
-    /* 加入背景色过渡 */
     transition: background 0.3s;
 }
 
-/* 中间核心 Logo - 提升 z-index 以在白色菜单上显示 */
+/* 中间核心 Logo */
 .logo-btn {
-    height: 45px;
+    /* 1. Logo 高度放大一倍，从 45px 变为 90px，等比例放大 */
+    height: 90px;
+    width: auto; /* 确保等比例 */
     cursor: pointer;
     transition: transform 0.3s;
     position: relative;
@@ -46,21 +48,22 @@ body { padding-top: 100px; padding-bottom: 24px; }
     transform: scale(1.03);
 }
 
-/* 汉堡菜单按钮（三条杠）- 缩小尺寸 - 提升 z-index */
+/* 汉堡菜单悬停区 */
 .menu-trigger {
     position: absolute;
     right: 40px;
     top: 0;
-    height: 80px; /* 与 header 同高 */
+    /* 1. 悬停高度适应新的 Header */
+    height: 110px;
     display: flex;
-    align-items: center; /* 垂直居中 */
+    align-items: center;
     z-index: 10002;
     cursor: pointer;
 }
 /* 三条杠图标容器 */
 .menu-trigger-icon {
-    width: 20px; /* 缩小宽度 */
-    height: 14px; /* 缩小高度 */
+    width: 20px;
+    height: 14px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -68,83 +71,73 @@ body { padding-top: 100px; padding-bottom: 24px; }
 .menu-trigger-icon span {
     display: block;
     width: 100%;
-    height: 1px; /* 极致纤细的切线 */
+    height: 1px;
     background: #fff;
+    /* 过渡效果保留 */
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s, background 0.3s;
 }
 
 /* ✟ 横向铺满最顶端的下拉菜单栏 ✟ */
 #dropdown-menu {
     position: absolute;
-    top: 0; /* 覆盖最顶端 */
+    top: 0;
     left: 0;
-    width: 100%; /* 横着铺满屏幕 */
+    width: 100%;
     
-    /* 初始隐藏状态：完全上滑并透明 */
     visibility: hidden;
     opacity: 0;
     transform: translateY(-100%); 
     
-    /* 白色背景 */
     background: #fff; 
     
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     box-sizing: border-box;
-    /* 顶部留出 header 高度的 padding，底部留出余量 */
-    padding: 100px 10% 40px; 
-    z-index: 10001; /* 介于 header 基础和 logo 之间 */
+    /* 1. 顶部 padding 增加，防止在 110px Header 上方显示 */
+    padding: 130px 10% 40px; 
+    z-index: 10001;
     display: flex;
-    justify-content: flex-end; /* 内容靠右对齐 */
+    justify-content: flex-end;
 }
 
-/* ✟ 核心 Hover 交互逻辑 (相对于整个 header) ✟ */
+/* ✟ 核心逻辑修改 ✟ */
 
-/* 当鼠标悬停在顶部 header 区域上时 */
-#header:hover #dropdown-menu {
+/* 2. 只有鼠标放在三条杠 (.menu-trigger) 上时才弹出菜单 */
+.menu-trigger:hover ~ #dropdown-menu {
     visibility: visible;
     opacity: 1;
-    transform: translateY(0); /* 滑动下落 */
+    transform: translateY(0);
 }
 
-/* Hover 时顶部 header 整体背景也变白（防止透明带来的断层） */
-/* #header:hover {
-    background: #fff;
-} */
-
-/* Hover 时三条杠变色，适应白色背景菜单 */
-#header:hover .menu-trigger-icon span {
+/* 3. 弹出菜单后，三条杠变色适应白色背景，但移除变为 ✕ 的动画 */
+.menu-trigger:hover .menu-trigger-icon span {
     background: #000;
 }
 
-/* 三条杠形变为 ✕ 的动态视觉 - 依然保留 */
-#header:hover .menu-trigger-icon span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-#header:hover .menu-trigger-icon span:nth-child(2) { opacity: 0; }
-#header:hover .menu-trigger-icon span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+/* >>> 原有的 ✕ 形变动画代码已被删除 <<< */
 
-
-/* 菜单内部按钮载体 */
+/* 菜单内部按钮 */
 .menu-links {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    text-align: right; /* 文字右对齐 */
+    text-align: right;
 }
 .menu-item {
-    font-size: 14px; /* 小文字 */
+    font-size: 14px;
     font-weight: 300;
     letter-spacing: 1px;
-    color: #666; /* 适应白色背景 */
+    color: #666;
     cursor: pointer;
     transition: color 0.3s, transform 0.3s;
     text-transform: uppercase;
-    white-space: nowrap; /* 防止文字换行 */
+    white-space: nowrap;
 }
 .menu-item:hover {
-    color: #000; /* 悬停变深 */
-    transform: translateX(-3px); /* 悬停时向左微调 */
+    color: #000;
+    transform: translateX(-3px);
 }
 
-/* A-F 3个一组矩阵 */
+/* A-F 矩阵 */
 .brand-section {
     width: 80%;
     max-width: 900px;
@@ -175,8 +168,7 @@ body { padding-top: 100px; padding-bottom: 24px; }
 #card {background:#0a0a0c;padding:30px;border-radius:0px;border:1px solid rgba(255,255,255,0.2);position:relative}
 #card img {width:min(80vw,320px);filter: grayscale(100%); transition: filter 0.3s}
 #card img:hover {filter: grayscale(0%)}
-#close {position:absolute;right:12px;top:8px;font-size:20px;font-weight:200;cursor:pointer;color:#888}
-#close:hover {color:#fff}
+/* 4. 移除了 #close ✕ 号的相关样式 */
 
 </style></head>
 <body>
@@ -185,7 +177,7 @@ body { padding-top: 100px; padding-bottom: 24px; }
 <div id="header">
     <img src="and.png" class="logo-btn" onclick="location.href='https://andseethingsasido.github.io/'">
     
-    <!-- 汉堡菜单悬停区 -->
+    <!-- 2. 菜单悬停区 - 只有悬停在这里才会触发菜单和变色 -->
     <div class="menu-trigger">
         <div class="menu-trigger-icon">
             <span></span>
@@ -194,7 +186,7 @@ body { padding-top: 100px; padding-bottom: 24px; }
         </div>
     </div>
     
-    <!-- ✟ 横向铺满全屏下拉菜单栏 ✟ -->
+    <!-- ✟ 下拉菜单栏 ✟ -->
     <div id="dropdown-menu">
         <div class="menu-links">
             <div class="menu-item" onclick="location.href='https://andseethingsasido.github.io/and666/'">商品</div>
@@ -217,8 +209,12 @@ body { padding-top: 100px; padding-bottom: 24px; }
     <div class="brand-tag">F</div>
 </div>
 
+<!-- 公众号弹窗 -->
 <div id="mask" onclick="if(event.target===this)this.style.display='none'">
-<div id="card"><div id="close" onclick="mask.style.display='none'">✕</div><img src="gozhonghao.jpg"></div>
+    <div id="card">
+        <!-- 4. 已删除原有的右上角 ✕ 号元素 -->
+        <img src="gozhonghao.jpg">
+    </div>
 </div>
 
 <script>
