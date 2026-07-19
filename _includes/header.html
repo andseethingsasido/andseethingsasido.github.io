@@ -96,7 +96,6 @@
     }
     #dropdown-menu.show { transform: translateY(0); }
 
-    /* 🎯 关键修改：强力右对齐容器，确保与三条杠右边缘完美贴合 */
     .menu-links { 
         display: flex; 
         flex-direction: column; 
@@ -105,20 +104,20 @@
         gap: 24px; 
     }
     
-    /* 👑 奢侈品官网视觉字体 */
+    /* 👑 奢侈品官网视觉字体（大小放大1/3，颜色改为纯黑） */
     .menu-item {
         font-family: "Helvetica Neue", Helvetica, Arial, -apple-system, sans-serif;
-        font-size: 15px; 
+        font-size: 20px; 
         font-weight: 700; 
         letter-spacing: 0.15em; 
-        color: #666; 
+        color: #000; 
         cursor: pointer;
-        transition: color 0.25s ease;
+        transition: opacity 0.25s ease;
         white-space: nowrap;
-        /* 🎯 清除多余的字间距尾部空隙，防止右对齐时产生微小错位 */
         margin-right: -0.15em; 
     }
-    .menu-item:hover { color: #000; }
+    /* 悬停微调：纯黑字体可以通过微降透明度来做出高级的交互感 */
+    .menu-item:hover { opacity: 0.6; }
 
     /* 响应式断点控制 */
     @media (max-width: 768px) {
