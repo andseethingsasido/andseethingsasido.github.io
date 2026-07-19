@@ -1,61 +1,81 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Welcome</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Welcome</title>
 
-    <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
+<style>
+html, body {
+    margin: 0;
+    padding: 30px 0;
+    width: 100%;
+    min-height: 100%;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-        img {
-            max-width: 80%;
-            max-height: 28%;
-            border-radius: 4px;
-            box-shadow: 0 0 20px rgba(255,255,255,0.1);
-            user-select: none;
-            -webkit-user-drag: none;
-            margin: 10px 0;
-        }
+    /* 允许上下滚动 */
+    overflow-y: auto;
+    overflow-x: hidden;
 
-        /* 第二张GIF可点击 */
-        #gifBottom {
-            cursor: pointer;
-        }
-    </style>
+    /* 滚动更顺滑 */
+    scroll-behavior: smooth;
+}
+
+/* 第一、第二张图片 */
+img {
+    width: 80%;
+    max-width: 900px;
+    border-radius: 4px;
+    box-shadow: 0 0 20px rgba(255,255,255,.1);
+    user-select: none;
+    -webkit-user-drag: none;
+    margin: 12px 0;
+}
+
+/* 第二张可点击 */
+#gifBottom{
+    cursor:pointer;
+}
+
+/* 第三张 dao.png */
+#dao{
+    width:80%;
+    max-width:900px;
+    height:auto;
+
+    /* 去掉边框效果 */
+    border:none;
+    border-radius:0;
+    box-shadow:none;
+
+    margin:25px 0 40px 0;
+}
+</style>
+
 </head>
 
 <body>
 
-    <!-- 第一张GIF -->
-    <img id="gifTop" src="and666.gif" alt="Live View Top">
+    <!-- 第一张 -->
+    <img id="gifTop" src="and666.gif" alt="Top">
 
-    <!-- 第二张GIF（可点击） -->
-    <img id="gifBottom" src="and777.gif" alt="Live View Bottom">
+    <!-- 第二张 -->
+    <img id="gifBottom" src="and777.gif" alt="Bottom">
 
-    <!-- 第三张PNG -->
+    <!-- 第三张 -->
     <img id="dao" src="dao.png" alt="DAO">
 
-    <script>
-        // 点击第二张GIF跳转
-        const gifBottom = document.getElementById("gifBottom");
+<script>
+const gifBottom = document.getElementById("gifBottom");
 
-        gifBottom.addEventListener("click", function(event) {
-            event.stopPropagation();
-            window.location.href = "https://andseethingsasido.github.io/and666/";
-        });
-    </script>
+gifBottom.addEventListener("click", function(e){
+    e.stopPropagation();
+    window.location.href = "https://andseethingsasido.github.io/and666/";
+});
+</script>
 
 </body>
 </html>
