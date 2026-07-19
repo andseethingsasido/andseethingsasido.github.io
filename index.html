@@ -1,3 +1,6 @@
+---
+layout: null
+---
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -12,128 +15,19 @@ img{user-select:none;-webkit-user-drag:none}
 #gifBottom{max-width:80%;max-height:45vh;border-radius:6px;box-shadow:0 0 20px rgba(255,255,255,.12);margin:12px 0;cursor:pointer}
 #dao{width:80%;max-width:900px;margin:24px 0 40px;box-shadow:none;border-radius:0}
 
-/* ✟ ERD 风格透明固定顶部栏基础布局 ✟ */
-#header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: transparent;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    z-index: 10000;
-    box-sizing: border-box;
-    padding: 0 40px;
-}
-
-/* 靠左 Logo 基础样式 */
-.logo-btn {
-    width: auto;
-    cursor: pointer;
-    position: relative;
-    z-index: 10003;
-    transition: transform 0.3s, filter 0.3s; 
-}
-.logo-btn:hover {
-    transform: scale(1.03);
-}
-.logo-btn.active {
-    filter: invert(1);
-}
-
-/* 右侧汉堡菜单悬停区基础样式 */
-.menu-trigger {
-    position: absolute;
-    right: 40px;
-    top: 0;
-    display: flex;
-    align-items: center;
-    z-index: 10002;
-    cursor: pointer;
-}
-.menu-trigger-icon {
-    display: flex;
-    flex-direction: column;
-}
-.menu-trigger-icon span {
-    display: block;
-    width: 100%;
-    background: #fff;
-    transition: background 0.3s;
-}
-.menu-trigger.active .menu-trigger-icon span {
-    background: #000;
-}
-
-/* 横向铺满下拉菜单栏基础样式 */
-#dropdown-menu {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    transform: translateY(-100%); 
-    background: #fff; 
-    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-    box-sizing: border-box;
-    z-index: 10001;
-    display: flex;
-    justify-content: flex-end; 
-}
-#dropdown-menu.show {
-    transform: translateY(0);
-}
-
 /* ==========================================================
-   📱 仅移动端生效的独立尺寸 (Logo 20px)
+   📱 仅移动端生效的独立尺寸 (同步 header 高度)
    ========================================================== */
 @media (max-width: 768px) {
     body { padding-top: 55px; padding-bottom: 24px; }
-    #header { height: 40px; }
-    .logo-btn { height: 20px; } 
-    .menu-trigger { height: 40px; }
-    .menu-trigger-icon { width: 16px; }
-    .menu-trigger-icon span { height: 1px; margin-bottom: 4px; }
-    .menu-trigger-icon span:last-child { margin-bottom: 0; }
-    #dropdown-menu { padding: 65px 40px 35px; }
 }
 
 /* ==========================================================
-   💻 仅 PC 端生效的独立尺寸 (Logo 35px)
+   💻 仅 PC 端生效的独立尺寸 (同步 header 高度)
    ========================================================== */
 @media (min-width: 769px) {
     body { padding-top: 80px; padding-bottom: 24px; }
     #gifTop { width: 53%; max-width: 600px; }
-    #header { height: 55px; }
-    .logo-btn { height: 35px; } 
-    .menu-trigger { height: 55px; }
-    .menu-trigger-icon { width: 22px; } 
-    .menu-trigger-icon span { height: 2px; margin-bottom: 4px; } 
-    .menu-trigger-icon span:last-child { margin-bottom: 0; }
-    #dropdown-menu { padding: 85px 40px 35px; }
-}
-
-/* 菜单内部按钮载体 */
-.menu-links {
-    display: flex;
-    flex-direction: column;
-    gap: 20px; 
-}
-.menu-item {
-    font-family: "Cinzel", "Didot", "Helvetica Neue", Arial, -apple-system, sans-serif;
-    font-size: 18px; 
-    font-weight: 600; 
-    letter-spacing: 6px; 
-    color: #555; 
-    cursor: pointer;
-    transition: color 0.3s, transform 0.3s;
-    text-transform: uppercase;
-    white-space: nowrap;
-    transform-origin: right center; 
-}
-.menu-item:hover {
-    color: #000; 
-    transform: scale(1.03); 
 }
 
 /* A-F 矩阵 */
@@ -170,7 +64,7 @@ img{user-select:none;-webkit-user-drag:none}
     background: #0a0a0c;
     padding: 35px; 
     border-radius: 0px;
-    border: 1px solid #000; /* 🛠 已修改：卡片外围调整为纯黑色边框 */
+    border: 1px solid #000;
     position: relative;
     display: flex;
     justify-content: center;
@@ -185,25 +79,8 @@ img{user-select:none;-webkit-user-drag:none}
 </style></head>
 <body>
 
-<!-- ✟ ERD 顶部导航栏 ✟ -->
-<div id="header">
-    <img src="logo.png" class="logo-btn" id="logoBtn" onclick="location.href='https://andseethingsasido.github.io/'">
-    
-    <div class="menu-trigger" id="menuTrigger">
-        <div class="menu-trigger-icon">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-    </div>
-    
-    <div id="dropdown-menu">
-        <div class="menu-links">
-            <div class="menu-item" onclick="closeMenu();location.href='https://andseethingsasido.github.io/and666/'">商店</div>
-            <div class="menu-item" onclick="closeMenu();document.getElementById('mask').style.display='flex'">公众号</div>
-        </div>
-    </div>
-</div>
+<!-- 🛠 动态召唤提取好的公共导航栏 -->
+{% include header.html %}
 
 <img id="gifTop" src="and666.gif">
 <img id="gifBottom" src="and777.gif">
@@ -218,98 +95,16 @@ img{user-select:none;-webkit-user-drag:none}
     <div class="brand-tag">F</div>
 </div>
 
+<!-- 二维码弹窗（路径已完美链接至 images/ 文件夹） -->
 <div id="mask" onclick="if(event.target===this)this.style.display='none'">
     <div id="card">
-        <img src="gozhonghao.jpg">
+        <img src="{{ '/images/gozhonghao.jpg' | relative_url }}">
     </div>
 </div>
 
 <script>
-gifBottom.onclick=()=>location.href="https://andseethingsasido.github.io/and666/";
-
-// ==========================================
-// 🛠 *交互控制引擎*
-// ==========================================
-const trigger = document.getElementById('menuTrigger');
-const menu = document.getElementById('dropdown-menu');
-const logo = document.getElementById('logoBtn');
-const mask = document.getElementById('mask');
-
-let isHoveringTrigger = false;
-let isHoveringMenu = false;
-let isHoveringLogo = false;
-let isClickOpen = false;
-
-function openMenu() {
-    menu.classList.add('show');
-    trigger.classList.add('active');
-    logo.classList.add('active');
-}
-
-function closeMenu() {
-    menu.classList.remove('show');
-    trigger.classList.remove('active');
-    logo.classList.remove('active');
-    isClickOpen = false;
-}
-
-function checkMenuStatus() {
-    setTimeout(() => {
-        if (!isHoveringTrigger && !isHoveringMenu && !isHoveringLogo && !isClickOpen) {
-            closeMenu();
-        }
-    }, 50);
-}
-
-logo.addEventListener('mouseenter', () => {
-    isHoveringLogo = true;
-    if (menu.classList.contains('show')) {
-        openMenu();
-    }
-});
-logo.addEventListener('mouseleave', () => {
-    isHoveringLogo = false;
-    checkMenuStatus();
-});
-
-trigger.addEventListener('mouseenter', () => {
-    isHoveringTrigger = true;
-    openMenu();
-});
-trigger.addEventListener('mouseleave', () => {
-    isHoveringTrigger = false;
-    checkMenuStatus();
-});
-
-trigger.addEventListener('click', (e) => {
-    e.stopPropagation();
-    if (menu.classList.contains('show') && isClickOpen) {
-        closeMenu();
-    } else {
-        isClickOpen = true;
-        openMenu();
-    }
-});
-
-menu.addEventListener('mouseenter', () => {
-    isHoveringMenu = true;
-});
-menu.addEventListener('mouseleave', () => {
-    isHoveringMenu = false;
-    checkMenuStatus();
-});
-
-document.addEventListener('click', (e) => {
-    if (isClickOpen && !menu.contains(e.target) && !trigger.contains(e.target)) {
-        closeMenu();
-    }
-});
-
-window.addEventListener('scroll', () => {
-    if (menu.classList.contains('show')) {
-        closeMenu();
-    }
-}, { passive: true });
+// 页面图片跳转逻辑
+gifBottom.onclick = () => location.href = "https://andseethingsasido.github.io/and666/";
 </script>
 </body>
 </html>
