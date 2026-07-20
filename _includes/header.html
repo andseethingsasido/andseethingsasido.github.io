@@ -4,9 +4,9 @@
 
 <!-- 1. 结构层 (HTML) -->
 <header id="header">
-    <!-- 动态解析：Logo 按钮（直接使用绝对根路径） -->
+    <!-- Logo 按钮：去掉前导斜杠，确保本地与线上都能完美识别 -->
     <img class="logo-btn" 
-         src="/images/logo.png" 
+         src="images/logo.png" 
          alt="LOGO" 
          id="headerLogoBtn"
          onclick="window.location.href='/'">
@@ -23,7 +23,7 @@
     <!-- 全屏/下拉遮罩菜单 -->
     <nav id="dropdown-menu">
         <div class="menu-links">
-            <!-- 商店跳转链接（已同步移除 and666） -->
+            <!-- 商店跳转链接 -->
             <span class="menu-item" onclick="window.location.href='https://andseethingsasido.github.io/'">商店</span>
             <!-- 公众号唤起弹窗 -->
             <span class="menu-item" onclick="openWeChatCard()">公众号</span>
@@ -42,8 +42,8 @@
         <!-- 弹窗哥特风标题 -->
         <div class="modal-title">Contact</div>
         
-        <!-- 二维码图片：直接使用绝对根路径，彻底杜绝找不到文件的问题 -->
-        <img src="/images/gozhonghao.jpg" alt="微信二维码" class="qrcode-img" id="modalQrcodeImg">
+        <!-- 二维码图片：使用标准相对路径，彻底杜绝找不到文件的问题 -->
+        <img src="images/gozhonghao.jpg" alt="微信二维码" class="qrcode-img" id="modalQrcodeImg">
     </div>
 </div>
 
@@ -149,7 +149,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        z-index: 100003; 
+        /* 修复关键：调高层级，必须高过 header 的 100010 */
+        z-index: 100020; 
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.3s ease;
@@ -258,7 +259,7 @@
         
         if (modal && !modal.classList.contains('active')) {
             trigger.classList.remove('active');
-            if(logo) logo.classList.remove('active');
+            if(logo) logo.classList.add('active');
         }
     }
 
@@ -321,9 +322,9 @@
     function openWeChatCard() {
         closeMenu(); 
         if (modal) {
-            // 确保在任何层级的页面下，弹窗展开时都能准确拿到根路径下的图片
+            // 路径修正：采用标准相对路径，同时兼顾线上和本地双击打开
             if (qrcodeImg) {
-                qrcodeImg.src = "/images/gozhonghao.jpg"; 
+                qrcodeImg.src = "images/gozhonghao.jpg"; 
             }
             modal.classList.add('active'); 
             trigger.classList.add('active');
