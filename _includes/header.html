@@ -1,6 +1,6 @@
 <!-- ==========================================================
-   ✟ GOTHIC LUXURY HANDHELD NAVIGATION HEADER ✟
-   ========================================================== -->
+    ✟ GOTHIC LUXURY HANDHELD NAVIGATION HEADER ✟
+    ========================================================== -->
 
 <!-- 1. 结构层 (HTML) -->
 <header id="header">
@@ -32,8 +32,8 @@
 </header>
 
 <!-- ==========================================================
-   ✟ 独立弹窗组件：公众号遮罩层 ✟
-   ========================================================== -->
+    ✟ 独立弹窗组件：公众号遮罩层 ✟
+    ========================================================== -->
 <div class="modal-overlay" id="qrcodeModal">
     <div class="modal-content">
         <!-- 关闭按钮 -->
@@ -42,8 +42,8 @@
         <!-- 弹窗哥特风标题 -->
         <div class="modal-title">Contact</div>
         
-        <!-- 二维码图片（改为通过 id 动态获取线上强关联路径，彻底避开空白缺陷） -->
-        <img src="" alt="微信二维码" class="qrcode-img" id="modalQrcodeImg">
+        <!-- 二维码图片：直接绑定静态 Jekyll 相对路径标签，确保在编译时就能正确映射 -->
+        <img src="{{ '/images/gozhonghao.jpg' | relative_url }}" alt="微信二维码" class="qrcode-img" id="modalQrcodeImg">
     </div>
 </div>
 
@@ -62,7 +62,6 @@
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        /* 确保导航栏层级永远高于弹窗遮罩层（100003） */
         z-index: 100010; 
         box-sizing: border-box;
         padding: 0 40px;
@@ -76,7 +75,6 @@
         transition: transform 0.3s, filter 0.3s; 
     }
     .logo-btn:hover { transform: scale(1.02); }
-    /* 当菜单打开或弹窗激活时，反色为黑色以适应纯白背景 */
     .logo-btn.active { filter: invert(1); }
 
     .menu-trigger {
@@ -101,7 +99,6 @@
         transition: background 0.3s, transform 0.3s; 
     }
     
-    /* 汉堡按钮变成黑色 */
     .menu-trigger.active .menu-trigger-icon span { background: #000; }
 
     #dropdown-menu {
@@ -320,16 +317,15 @@
         }
     });
 
-    // 🔗 唤起微信弹窗控制逻辑与图片路径精准匹配
+    // 🔗 唤起微信弹窗控制逻辑
     function openWeChatCard() {
         closeMenu(); 
         if (modal) {
-            // 直接采用线上绝对地址为 src 赋值，彻底杜绝本地相对路径解析失败导致的空白问题
-            if (qrcodeImg) {
-                qrcodeImg.src = "https://andseethingsasido.github.io/and666/images/gozhonghao.jpg";
+            // 如果静态标签失效，用这行 JS 自动向上级补全路径
+            if (qrcodeImg && !qrcodeImg.getAttribute('src')) {
+                qrcodeImg.src = "images/gozhonghao.jpg"; 
             }
             modal.classList.add('active'); 
-            // 弹窗出现时，强制让位于最顶层的 Logo 和汉堡保持黑色高亮状态
             trigger.classList.add('active');
             if(logo) logo.classList.add('active');
         }
@@ -339,7 +335,6 @@
     function handleModalClose() {
         if (modal) {
             modal.classList.remove('active');
-            // 弹窗关闭时，同步恢复 Logo 和汉堡原本的白色视觉
             trigger.classList.remove('active');
             if(logo) logo.classList.remove('active');
         }
