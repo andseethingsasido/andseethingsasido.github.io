@@ -4,14 +4,12 @@
 
 <!-- 1. 结构层 (HTML) -->
 <header id="header">
-    <!-- Logo 按钮：去掉前导斜杠，确保本地与线上都能完美识别 -->
     <img class="logo-btn" 
          src="images/logo.png" 
          alt="LOGO" 
          id="headerLogoBtn"
          onclick="window.location.href='/'">
 
-    <!-- 右侧汉堡菜单触发器 -->
     <div class="menu-trigger" id="menuTrigger">
         <div class="menu-trigger-icon">
             <span></span>
@@ -20,12 +18,9 @@
         </div>
     </div>
 
-    <!-- 全屏/下拉遮罩菜单 -->
     <nav id="dropdown-menu">
         <div class="menu-links">
-            <!-- 商店跳转链接 -->
             <span class="menu-item" onclick="window.location.href='https://andseethingsasido.github.io/'">商店</span>
-            <!-- 公众号唤起弹窗 -->
             <span class="menu-item" onclick="openWeChatCard()">公众号</span>
         </div>
     </nav>
@@ -39,17 +34,15 @@
         <!-- 关闭按钮 -->
         <span class="close-btn" id="closeTrigger">&times;</span>
         
-        <!-- 弹窗哥特风标题 -->
         <div class="modal-title">Contact</div>
         
-        <!-- 二维码图片：使用标准相对路径，彻底杜绝找不到文件的问题 -->
+        <!-- 二维码图片：直接绑定确定存在的相对路径 -->
         <img src="images/gozhonghao.jpg" alt="微信二维码" class="qrcode-img" id="modalQrcodeImg">
     </div>
 </div>
 
 <!-- 2. 样式层 (CSS) -->
 <style>
-    /* 引入高级哥特衬线字体 */
     @import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap');
 
     /* ------------------- 导航栏样式 ------------------- */
@@ -137,20 +130,20 @@
     }
     .menu-item:hover { opacity: 0.6; }
 
-    /* ------------------- 弹窗样式 ------------------- */
+    /* ------------------- 弹窗样式（暴力置顶版） ------------------- */
     .modal-overlay {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(255, 255, 255, 0.92); 
+        background-color: rgba(255, 255, 255, 0.96); /* 稍微加深底色确保可见 */
         backdrop-filter: blur(4px); 
         display: flex;
         justify-content: center;
         align-items: center;
-        /* 修复关键：调高层级，必须高过 header 的 100010 */
-        z-index: 100020; 
+        /* 强制赋予全系统最高层级，把 header 踩在脚下 */
+        z-index: 999999 !important; 
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.3s ease;
@@ -176,6 +169,7 @@
         justify-content: center;
         align-items: center;
         box-sizing: border-box;
+        z-index: 1000000 !important;
     }
 
     .modal-overlay.active .modal-content {
@@ -195,11 +189,8 @@
         object-fit: contain;
         margin: 0 auto;
         display: block;
-        filter: grayscale(100%); 
-        transition: filter 0.3s ease;
-    }
-    .qrcode-img:hover { 
-        filter: grayscale(0%); 
+        /* 暂时移除黑白滤镜，排除浏览器渲染Bug */
+        filter: none !important; 
     }
 
     .close-btn {
@@ -214,7 +205,7 @@
     }
     .close-btn:hover { color: #000000; }
 
-    /* ------------------- 响应式断点 ------------------- */
+    /* 响应式断点 */
     @media (max-width: 768px) {
         #header { height: 40px; padding: 0 20px; }
         .logo-btn { height: 20px; } 
@@ -256,10 +247,9 @@
     function closeMenu() {
         menu.classList.remove('show');
         isClickOpen = false;
-        
         if (modal && !modal.classList.contains('active')) {
             trigger.classList.remove('active');
-            if(logo) logo.classList.add('active');
+            if(logo) logo.classList.remove('active');
         }
     }
 
@@ -271,68 +261,42 @@
         }, 30);
     }
 
-    // PC 端悬浮检测
     if (window.innerWidth >= 769) {
-        trigger.addEventListener('mouseenter', () => {
-            isHoveringTrigger = true;
-            openMenu();
-        });
-        trigger.addEventListener('mouseleave', () => {
-            isHoveringTrigger = false;
-            checkMenuStatus();
-        });
-
+        trigger.addEventListener('mouseenter', () => { isHoveringTrigger = true; openMenu(); });
+        trigger.addEventListener('mouseleave', () => { isHoveringTrigger = false; checkMenuStatus(); });
         menu.addEventListener('mouseenter', () => { isHoveringMenu = true; });
         menu.addEventListener('mouseleave', () => { isHoveringMenu = false; checkMenuStatus(); });
-
         if (logo) {
-            logo.addEventListener('mouseenter', () => {
-                isHoveringLogo = true;
-                if (menu.classList.contains('show')) openMenu();
-            });
-            logo.addEventListener('mouseleave', () => {
-                isHoveringLogo = false;
-                checkMenuStatus();
-            });
+            logo.addEventListener('mouseenter', () => { isHoveringLogo = true; if (menu.classList.contains('show')) openMenu(); });
+            logo.addEventListener('mouseleave', () => { isHoveringLogo = false; checkMenuStatus(); });
         }
     }
 
-    // 移动端与全域点击闭合
     trigger.addEventListener('click', (e) => {
         e.stopPropagation();
-        if (menu.classList.contains('show')) {
-            closeMenu();
-        } else {
-            isClickOpen = true;
-            openMenu();
-        }
+        if (menu.classList.contains('show')) { closeMenu(); } else { isClickOpen = true; openMenu(); }
     });
 
-    window.addEventListener('scroll', () => {
-        if (menu.classList.contains('show')) closeMenu();
-    }, { passive: true });
+    window.addEventListener('scroll', () => { if (menu.classList.contains('show')) closeMenu(); }, { passive: true });
 
     document.addEventListener('click', (e) => {
-        if (menu.classList.contains('show') && !menu.contains(e.target) && !trigger.contains(e.target)) {
-            closeMenu();
-        }
+        if (menu.classList.contains('show') && !menu.contains(e.target) && !trigger.contains(e.target)) { closeMenu(); }
     });
 
     // 🔗 唤起微信弹窗控制逻辑
     function openWeChatCard() {
         closeMenu(); 
         if (modal) {
-            // 路径修正：采用标准相对路径，同时兼顾线上和本地双击打开
-            if (qrcodeImg) {
-                qrcodeImg.src = "images/gozhonghao.jpg"; 
-            }
             modal.classList.add('active'); 
+            // 弹窗展开时，强制刷新一次图片源，杜绝浏览器缓存死图
+            if (qrcodeImg) {
+                qrcodeImg.src = "images/gozhonghao.jpg?v=" + new Date().getTime(); 
+            }
             trigger.classList.add('active');
             if(logo) logo.classList.add('active');
         }
     }
 
-    // 统一处理弹窗关闭函数
     function handleModalClose() {
         if (modal) {
             modal.classList.remove('active');
@@ -341,13 +305,8 @@
         }
     }
 
-    // 弹窗关闭行为绑定
-    if (closeBtn) {
-        closeBtn.addEventListener('click', handleModalClose);
-    }
+    if (closeBtn) closeBtn.addEventListener('click', handleModalClose);
     if (modal) {
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) handleModalClose();
-        });
+        modal.addEventListener('click', (e) => { if (e.target === modal) handleModalClose(); });
     }
 </script>
