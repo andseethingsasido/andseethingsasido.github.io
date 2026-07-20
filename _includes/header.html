@@ -36,8 +36,14 @@
         
         <div class="modal-title">Contact</div>
         
-        <!-- 二维码图片：直接绑定确定存在的相对路径 -->
-        <img src="images/gozhonghao.jpg" alt="gozhonghao" class="qrcode-img" id="modalQrcodeImg">
+        <!-- 自动破案机制：如果图片挂了，直接触发 onerror 把真实路径打印出来 -->
+        <div id="qrcodeContainer" style="width: 100%; min-height: 160px; display: flex; align-items: center; justify-content: center;">
+            <img src="images/gozhonghao.jpg" 
+                 alt="gozhonghao" 
+                 class="qrcode-img" 
+                 id="modalQrcodeImg"
+                 onerror="handleQrError(this)">
+        </div>
     </div>
 </div>
 
@@ -130,19 +136,18 @@
     }
     .menu-item:hover { opacity: 0.6; }
 
-    /* ------------------- 弹窗样式（暴力置顶版） ------------------- */
+    /* ------------------- 弹窗样式（最高优先级置顶） ------------------- */
     .modal-overlay {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(255, 255, 255, 0.96); /* 稍微加深底色确保可见 */
+        background-color: rgba(255, 255, 255, 0.96); 
         backdrop-filter: blur(4px); 
         display: flex;
         justify-content: center;
         align-items: center;
-        /* 强制赋予全系统最高层级，把 header 踩在脚下 */
         z-index: 999999 !important; 
         opacity: 0;
         pointer-events: none;
@@ -189,7 +194,6 @@
         object-fit: contain;
         margin: 0 auto;
         display: block;
-        /* 暂时移除黑白滤镜，排除浏览器渲染Bug */
         filter: none !important; 
     }
 
@@ -237,6 +241,15 @@
     let isHoveringMenu = false;
     let isHoveringLogo = false;
     let isClickOpen = false;
+
+    // 图片加载失败的捕获器
+    function handleQrError(imgElement) {
+        const container = document.getElementById('qrcodeContainer');
+        if (container) {
+            // 在页面上直接打印出错误路径，方便你直接复制去浏览器地址栏测试
+            container.innerHTML = `<div style="color: #c00; font-size: 12px; padding: 10px; border: 1px dashed #c00; word-break: break-all;">图片加载失败！<br>尝试请求的绝对路径为：<br><strong>${imgElement.src}</strong></div>`;
+        }
+    }
 
     function openMenu() {
         menu.classList.add('show');
@@ -288,10 +301,6 @@
         closeMenu(); 
         if (modal) {
             modal.classList.add('active'); 
-            // 弹窗展开时，强制刷新一次图片源，杜绝浏览器缓存死图
-            if (qrcodeImg) {
-                qrcodeImg.src = "images/gozhonghao.jpg?v=" + new Date().getTime(); 
-            }
             trigger.classList.add('active');
             if(logo) logo.classList.add('active');
         }
