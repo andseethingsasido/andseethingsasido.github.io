@@ -4,12 +4,12 @@
 
 <!-- 1. 结构层 (HTML) -->
 <header id="header">
-    <!-- 动态解析：Logo 按钮 -->
+    <!-- 动态解析：Logo 按钮（直接使用绝对根路径） -->
     <img class="logo-btn" 
-         src="{{ '/images/logo.png' | relative_url }}" 
+         src="/images/logo.png" 
          alt="LOGO" 
          id="headerLogoBtn"
-         onclick="window.location.href='{{ '/' | relative_url }}'">
+         onclick="window.location.href='/'">
 
     <!-- 右侧汉堡菜单触发器 -->
     <div class="menu-trigger" id="menuTrigger">
@@ -23,8 +23,8 @@
     <!-- 全屏/下拉遮罩菜单 -->
     <nav id="dropdown-menu">
         <div class="menu-links">
-            <!-- 商店跳转链接 -->
-            <span class="menu-item" onclick="window.location.href='https://andseethingsasido.github.io/and666/'">商店</span>
+            <!-- 商店跳转链接（已同步移除 and666） -->
+            <span class="menu-item" onclick="window.location.href='https://andseethingsasido.github.io/'">商店</span>
             <!-- 公众号唤起弹窗 -->
             <span class="menu-item" onclick="openWeChatCard()">公众号</span>
         </div>
@@ -42,8 +42,8 @@
         <!-- 弹窗哥特风标题 -->
         <div class="modal-title">Contact</div>
         
-        <!-- 二维码图片：直接绑定静态 Jekyll 相对路径标签，确保在编译时就能正确映射 -->
-        <img src="{{ '/images/gozhonghao.jpg' | relative_url }}" alt="微信二维码" class="qrcode-img" id="modalQrcodeImg">
+        <!-- 二维码图片：直接使用绝对根路径，彻底杜绝找不到文件的问题 -->
+        <img src="/images/gozhonghao.jpg" alt="微信二维码" class="qrcode-img" id="modalQrcodeImg">
     </div>
 </div>
 
@@ -321,9 +321,9 @@
     function openWeChatCard() {
         closeMenu(); 
         if (modal) {
-            // 如果静态标签失效，用这行 JS 自动向上级补全路径
-            if (qrcodeImg && !qrcodeImg.getAttribute('src')) {
-                qrcodeImg.src = "images/gozhonghao.jpg"; 
+            // 确保在任何层级的页面下，弹窗展开时都能准确拿到根路径下的图片
+            if (qrcodeImg) {
+                qrcodeImg.src = "/images/gozhonghao.jpg"; 
             }
             modal.classList.add('active'); 
             trigger.classList.add('active');
