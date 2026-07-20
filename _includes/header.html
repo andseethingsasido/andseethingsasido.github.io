@@ -42,8 +42,8 @@
         <!-- 弹窗哥特风标题 -->
         <div class="modal-title">Contact</div>
         
-        <!-- 二维码图片（路径已修正） -->
-        <img src="images/gongzhonghao.jpg" alt="微信二维码" class="qrcode-img">
+        <!-- 二维码图片（已修正为标准动态相对路径） -->
+        <img src="{{ '/images/gongzhonghao.jpg' | relative_url }}" alt="微信二维码" class="qrcode-img">
     </div>
 </div>
 
@@ -62,7 +62,8 @@
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        z-index: 10000;
+        /* 👑 核心修正：确保导航栏层级永远高于弹窗遮罩层（100003） */
+        z-index: 100010; 
         box-sizing: border-box;
         padding: 0 40px;
     }
@@ -75,6 +76,7 @@
         transition: transform 0.3s, filter 0.3s; 
     }
     .logo-btn:hover { transform: scale(1.02); }
+    /* 当菜单打开或弹窗激活时，反色为黑色以适应纯白背景 */
     .logo-btn.active { filter: invert(1); }
 
     .menu-trigger {
@@ -99,6 +101,7 @@
         transition: background 0.3s, transform 0.3s; 
     }
     
+    /* 汉堡按钮变成黑色 */
     .menu-trigger.active .menu-trigger-icon span { background: #000; }
 
     #dropdown-menu {
@@ -162,8 +165,8 @@
 
     .modal-content {
         background-color: #ffffff; 
-        border: 1px solid #000000; /* 要求的纯黑色硬朗边框 */
-        padding: 35px 35px 45px 35px; /* 底部预留舒适的呼吸空间 */
+        border: 1px solid #000000; 
+        padding: 35px 35px 45px 35px; 
         text-align: center;
         max-width: 320px;
         width: 90%;
@@ -252,10 +255,14 @@
     }
 
     function closeMenu() {
+        // 只有当弹窗未激活时，才在关闭菜单时移除 logo 和汉堡的激活状态
         menu.classList.remove('show');
-        trigger.classList.remove('active');
-        if(logo) logo.classList.remove('active');
         isClickOpen = false;
+        
+        if (modal && !modal.classList.contains('active')) {
+            trigger.classList.remove('active');
+            if(logo) logo.classList.remove('active');
+        }
     }
 
     function checkMenuStatus() {
@@ -318,16 +325,29 @@
         closeMenu(); 
         if (modal) {
             modal.classList.add('active'); 
+            // 弹窗出现时，强制让位于顶层的 Logo 和汉堡变成黑色
+            trigger.classList.add('active');
+            if(logo) logo.classList.add('active');
+        }
+    }
+
+    // 统一处理弹窗关闭函数
+    function handleModalClose() {
+        if (modal) {
+            modal.classList.remove('active');
+            // 弹窗关闭时，同步恢复 Logo 和汉堡原本的白色视觉
+            trigger.classList.remove('active');
+            if(logo) logo.classList.remove('active');
         }
     }
 
     // 弹窗关闭行为绑定
     if (closeBtn) {
-        closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+        closeBtn.addEventListener('click', handleModalClose);
     }
     if (modal) {
         modal.addEventListener('click', (e) => {
-            if (e.target === modal) modal.classList.remove('active');
+            if (e.target === modal) handleModalClose();
         });
     }
 </script>
