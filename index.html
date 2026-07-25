@@ -1,12 +1,8 @@
 ---
-layout: null
+layout: default
+title: ANDSEETHINGSASIDO
 ---
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ANDSEETHINGSASIDO</title>
+
 <style>
 html, body {
     margin: 0;
@@ -58,11 +54,6 @@ img { user-select: none; -webkit-user-drag: none; }
     background: rgba(255, 255, 255, 0.03);
 }
 </style>
-</head>
-<body>
-
-<!-- 顶部导航组件（自带全局小图标 + 防遮挡内边距） -->
-{% include header.html %}
 
 <img id="gifTop" src="{{ '/and666.gif' | relative_url }}">
 <img id="gifBottom" src="{{ '/and777.gif' | relative_url }}">
@@ -76,12 +67,7 @@ img { user-select: none; -webkit-user-drag: none; }
     <div class="brand-tag">F</div>
 </div>
 
-<!-- 底部导航组件（自带透明背景 + 防遮挡内边距） -->
-{% include footer.html %}
-
 <script>
 // 点击底部 GIF 跳转
 document.getElementById('gifBottom').onclick = () => location.href = "https://andseethingsasido.github.io/and666/";
 </script>
-</body>
-</html>
