@@ -27,20 +27,14 @@ img { user-select: none; -webkit-user-drag: none; }
 #gifTop { width: 80%; max-width: 900px; border-radius: 6px; box-shadow: 0 0 20px rgba(255,255,255,.12); margin: 12px 0; }
 #gifBottom { max-width: 80%; max-height: 45vh; border-radius: 6px; box-shadow: 0 0 20px rgba(255,255,255,.12); margin: 12px 0; cursor: pointer; }
 
-/* 📱 移动端尺寸及底部防遮挡边距 */
+/* 📱 移动端尺寸 */
 @media (max-width: 768px) {
-    body { 
-        padding-top: 55px; 
-        padding-bottom: 90px; /* 给固定底部留出展示空间 */
-    }
+    body { padding-top: 55px; }
 }
 
-/* 💻 PC 端尺寸及底部防遮挡边距 */
+/* 💻 PC 端尺寸 */
 @media (min-width: 769px) {
-    body { 
-        padding-top: 80px; 
-        padding-bottom: 120px; /* 给固定底部留出展示空间 */
-    }
+    body { padding-top: 80px; }
     #gifTop { width: 53%; max-width: 600px; }
 }
 
@@ -73,7 +67,7 @@ img { user-select: none; -webkit-user-drag: none; }
 </head>
 <body>
 
-<!-- 🛠 1. 顶部导航栏及公众号弹窗组件 -->
+<!-- 顶部导航栏及公众号弹窗组件 -->
 {% include header.html %}
 
 <img id="gifTop" src="{{ '/and666.gif' | relative_url }}">
@@ -88,7 +82,7 @@ img { user-select: none; -webkit-user-drag: none; }
     <div class="brand-tag">F</div>
 </div>
 
-<!-- 🛠 2. 吸底固定 700px 图片导航栏组件 -->
+<!-- 独立底栏组件（自带透明背景 + 自动防遮挡边距） -->
 {% include footer.html %}
 
 <script>
