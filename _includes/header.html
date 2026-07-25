@@ -2,6 +2,9 @@
     ✟ GOTHIC LUXURY HANDHELD NAVIGATION HEADER (SELF-CONTAINED) ✟
     ========================================================== -->
 
+<!-- 🌟 全局浏览器小图标：所有引入此组件的子网页都会自动生效 -->
+<link rel="icon" href="{{ '/images/tougu.png' | relative_url }}" type="image/png">
+
 <!-- 1. 结构层 (HTML) -->
 <header id="header">
     <img class="logo-btn" 
@@ -39,7 +42,7 @@
 <style>
     @import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap');
 
-    /* 🌟 1. 自动注入顶部防遮挡边距（让任意新页面都能直接完美使用） */
+    /* 自动注入顶部防遮挡边距 */
     @media (max-width: 768px) {
         body { padding-top: 55px !important; }
     }
@@ -47,7 +50,6 @@
         body { padding-top: 80px !important; }
     }
 
-    /* ------------------- 导航栏样式 ------------------- */
     #header {
         position: fixed;
         top: 0;
@@ -136,7 +138,7 @@
     }
     .menu-item:hover { opacity: 0.6; }
 
-    /* ------------------- 弹窗样式 ------------------- */
+    /* 弹窗样式 */
     .modal-overlay {
         position: fixed;
         top: 0;
@@ -208,7 +210,6 @@
     }
     .close-btn:hover { color: #000000; }
 
-    /* 响应式尺寸 */
     @media (max-width: 768px) {
         #header { height: 40px; padding: 0 20px; }
         .logo-btn { height: 20px; } 
