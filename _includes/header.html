@@ -5,10 +5,10 @@
 <!-- 1. 结构层 (HTML) -->
 <header id="header">
     <img class="logo-btn" 
-         src="images/logo.png" 
+         src="{{ '/images/logo.png' | relative_url }}" 
          alt="LOGO" 
          id="headerLogoBtn"
-         onclick="window.location.href='/'">
+         onclick="window.location.href='{{ '/' | relative_url }}'">
 
     <div class="menu-trigger" id="menuTrigger">
         <div class="menu-trigger-icon">
@@ -20,33 +20,19 @@
 
     <nav id="dropdown-menu">
         <div class="menu-links">
-            <!-- 🛒 商店链接 -->
             <span class="menu-item" onclick="window.location.href='https://andseethingsasido.github.io/and666/'">商店</span>
             <span class="menu-item" onclick="openWeChatCard()">公众号</span>
         </div>
     </nav>
 </header>
 
-<!-- ==========================================================
-    ✟ 独立弹窗组件：公众号遮罩层 ✟
-    ========================================================== -->
+<!-- 独立弹窗组件：公众号遮罩层 -->
 <div class="modal-overlay" id="qrcodeModal">
     <div class="modal-content">
-        <!-- 关闭按钮 -->
         <span class="close-btn" id="closeTrigger">&times;</span>
-        
         <div class="modal-title">Contact</div>
-        
-        <!-- 二维码图片 -->
-        <img src="https://andseethingsasido.github.io/images/gozhonghao.jpg" alt="gozhonghao" class="qrcode-img" id="modalQrcodeImg">
+        <img src="{{ '/images/gozhonghao.jpg' | relative_url }}" alt="gozhonghao" class="qrcode-img" id="modalQrcodeImg">
     </div>
-</div>
-
-<!-- ==========================================================
-    ✟ 底部居中图片组件 ✟
-    ========================================================== -->
-<div class="bottom-dao-wrapper">
-    <img src="images/dao.png" alt="dao" class="bottom-dao-img">
 </div>
 
 <!-- 2. 样式层 (CSS) -->
@@ -63,11 +49,10 @@
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        /* 强制凌驾于弹窗（999999）之上，确保 LOGO 不被遮挡 */
-        z-index: 1000010 !important; 
+        z-index: 1000010 !important; /* 强制最高层级，保证 LOGO 反色置顶 */
         box-sizing: border-box;
         padding: 0 40px;
-        pointer-events: none; /* 防止透明的 header 阻挡网页下方的点击，让点击穿透 */
+        pointer-events: none; /* 让透明 Header 区域点击穿透 */
     }
 
     .logo-btn {
@@ -76,10 +61,10 @@
         position: relative;
         z-index: 10003;
         transition: transform 0.3s, filter 0.3s; 
-        pointer-events: auto; /* 恢复 LOGO 自身的点击事件 */
+        pointer-events: auto;
     }
     .logo-btn:hover { transform: scale(1.02); }
-    .logo-btn.active { filter: invert(1) !important; } /* 确保反色拥有最高优先级 */
+    .logo-btn.active { filter: invert(1) !important; }
 
     .menu-trigger {
         position: absolute;
@@ -89,7 +74,7 @@
         align-items: center;
         z-index: 10002;
         cursor: pointer;
-        pointer-events: auto; /* 恢复菜单按钮自身的点击事件 */
+        pointer-events: auto;
     }
     
     .menu-trigger-icon { 
@@ -118,7 +103,7 @@
         z-index: 10001;
         display: flex;
         justify-content: flex-end; 
-        pointer-events: auto; /* 恢复下拉菜单内部的点击事件 */
+        pointer-events: auto;
     }
     #dropdown-menu.show { transform: translateY(0); }
 
@@ -155,7 +140,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        z-index: 999999 !important; /* 弹窗在次顶层 */
+        z-index: 999999 !important;
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.3s ease;
@@ -183,9 +168,7 @@
         box-sizing: border-box;
     }
 
-    .modal-overlay.active .modal-content {
-        transform: scale(1);
-    }
+    .modal-overlay.active .modal-content { transform: scale(1); }
 
     .modal-title {
         font-family: 'UnifrakturMaguntia', cursive;
@@ -215,25 +198,7 @@
     }
     .close-btn:hover { color: #000000; }
 
-    /* ------------------- 底部居中图片样式 ------------------- */
-    .bottom-dao-wrapper {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 40px 0 20px 0;
-        box-sizing: border-box;
-    }
-
-    .bottom-dao-img {
-        width: 900px;
-        max-width: 95vw; /* 适应小屏幕自适应缩小，防止水平溢出 */
-        height: auto;
-        display: block;
-        object-fit: contain;
-    }
-
-    /* 响应式断点 */
+    /* 响应式尺寸 */
     @media (max-width: 768px) {
         #header { height: 40px; padding: 0 20px; }
         .logo-btn { height: 20px; } 
@@ -258,7 +223,6 @@
     const menu = document.getElementById('dropdown-menu');
     const logo = document.getElementById('headerLogoBtn');
     const modal = document.getElementById('qrcodeModal');
-    const qrcodeImg = document.getElementById('modalQrcodeImg');
     const closeBtn = document.getElementById('closeTrigger');
 
     let isHoveringTrigger = false;
@@ -275,7 +239,6 @@
     function closeMenu() {
         menu.classList.remove('show');
         isClickOpen = false;
-        // 只有当弹窗也没有打开时，才移除导航栏图标激活状态
         if (modal && !modal.classList.contains('active')) {
             trigger.classList.remove('active');
             if(logo) logo.classList.remove('active');
@@ -312,12 +275,10 @@
         if (menu.classList.contains('show') && !menu.contains(e.target) && !trigger.contains(e.target)) { closeMenu(); }
     });
 
-    // 🔗 唤起微信弹窗控制逻辑
     function openWeChatCard() {
         closeMenu(); 
         if (modal) {
             modal.classList.add('active'); 
-            // 弹窗出现时，强制为 LOGO 和三条杠菜单按钮加上 active 类名（触发反色）
             trigger.classList.add('active');
             if(logo) logo.classList.add('active');
         }
