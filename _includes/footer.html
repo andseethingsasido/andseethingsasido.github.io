@@ -1,5 +1,5 @@
 <!-- ==========================================================
-    ✟ FOOTER COMPONENT (CENTERED 800PX PHOTO) ✟
+    ✟ FIXED BOTTOM NAVIGATION COMPONENT (700PX PHOTO) ✟
     ========================================================== -->
 
 <footer id="footer">
@@ -10,25 +10,25 @@
 
 <style>
     #footer {
+        position: fixed;     /* 悬浮固定 */
+        bottom: 0;           /* 紧贴屏幕底部 */
+        left: 0;
         width: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 40px 0 80px 0;
-        background: #000;
+        padding: 15px 0;    /* 适度缩小上下边距，避免占用过多屏幕空间 */
+        background: #000;    /* 纯黑背景遮挡下方滚过的文字内容 */
         box-sizing: border-box;
-        position: relative;
-        z-index: 10;
-        margin-top: 40px;
+        z-index: 9999;       /* 保证浮在普通内容上方，低于 Header 弹窗 */
     }
 
-    /* 限制 800px 居中容器 */
+    /* 缩小 100px：由 800px 改为 700px */
     .footer-photo-wrapper {
-        width: 800px;
-        max-width: 90vw;
+        width: 700px;
+        max-width: 90vw;    /* 移动端自适应 */
         margin: 0 auto;
         display: block;
-        box-sizing: border-box;
     }
 
     .footer-photo {
