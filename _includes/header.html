@@ -1,5 +1,5 @@
 <!-- ==========================================================
-    ✟ GOTHIC LUXURY HANDHELD NAVIGATION HEADER ✟
+    ✟ GOTHIC LUXURY HANDHELD NAVIGATION HEADER (SELF-CONTAINED) ✟
     ========================================================== -->
 
 <!-- 1. 结构层 (HTML) -->
@@ -38,6 +38,14 @@
 <!-- 2. 样式层 (CSS) -->
 <style>
     @import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap');
+
+    /* 🌟 1. 自动注入顶部防遮挡边距（让任意新页面都能直接完美使用） */
+    @media (max-width: 768px) {
+        body { padding-top: 55px !important; }
+    }
+    @media (min-width: 769px) {
+        body { padding-top: 80px !important; }
+    }
 
     /* ------------------- 导航栏样式 ------------------- */
     #header {
@@ -142,14 +150,14 @@
         align-items: center;
         z-index: 999999 !important;
         opacity: 0;
-        visibility: hidden; /* 彻底物理隐藏遮罩，防止阻挡底部渲染 */
+        visibility: hidden;
         pointer-events: none;
         transition: opacity 0.3s ease, visibility 0.3s ease;
     }
 
     .modal-overlay.active {
         opacity: 1;
-        visibility: visible; /* 激活时显示 */
+        visibility: visible;
         pointer-events: auto;
     }
 
