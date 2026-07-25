@@ -20,20 +20,27 @@ html, body {
     min-height: 100vh;
     overflow-y: auto;
     scroll-behavior: smooth;
+    box-sizing: border-box;
 }
 img { user-select: none; -webkit-user-drag: none; }
 
 #gifTop { width: 80%; max-width: 900px; border-radius: 6px; box-shadow: 0 0 20px rgba(255,255,255,.12); margin: 12px 0; }
 #gifBottom { max-width: 80%; max-height: 45vh; border-radius: 6px; box-shadow: 0 0 20px rgba(255,255,255,.12); margin: 12px 0; cursor: pointer; }
 
-/* 📱 移动端尺寸 */
+/* 📱 移动端尺寸及底部防遮挡边距 */
 @media (max-width: 768px) {
-    body { padding-top: 55px; }
+    body { 
+        padding-top: 55px; 
+        padding-bottom: 90px; /* 给固定底部留出展示空间 */
+    }
 }
 
-/* 💻 PC 端尺寸 */
+/* 💻 PC 端尺寸及底部防遮挡边距 */
 @media (min-width: 769px) {
-    body { padding-top: 80px; }
+    body { 
+        padding-top: 80px; 
+        padding-bottom: 120px; /* 给固定底部留出展示空间 */
+    }
     #gifTop { width: 53%; max-width: 600px; }
 }
 
@@ -81,7 +88,7 @@ img { user-select: none; -webkit-user-drag: none; }
     <div class="brand-tag">F</div>
 </div>
 
-<!-- 🛠 2. 底部居中 800px 图片导航栏组件 -->
+<!-- 🛠 2. 吸底固定 700px 图片导航栏组件 -->
 {% include footer.html %}
 
 <script>
