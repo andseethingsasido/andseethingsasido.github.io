@@ -1,5 +1,5 @@
 <!-- ==========================================================
-    ✟ FIXED BOTTOM NAVIGATION COMPONENT (TRANSPARENT PNG) ✟
+    ✟ FIXED BOTTOM NAVIGATION COMPONENT (CLICK-THROUGH) ✟
     ========================================================== -->
 
 <footer id="footer">
@@ -9,7 +9,7 @@
 </footer>
 
 <style>
-    /* 1. 给页面增加底部安全距离，防止下方文字被图片遮挡 */
+    /* 1. 给页面增加底部安全距离，防止下方文字贴底 */
     @media (max-width: 768px) {
         body { padding-bottom: 90px !important; }
     }
@@ -17,7 +17,7 @@
         body { padding-bottom: 120px !important; }
     }
 
-    /* 2. 悬浮底部容器：完全透明背景 + 穿透点击 */
+    /* 2. 悬浮底部容器：完全透明背景 + 鼠标点击穿透 */
     #footer {
         position: fixed;
         bottom: 0;
@@ -27,19 +27,25 @@
         justify-content: center;
         align-items: center;
         padding: 15px 0;
-        background: transparent !important; /* 彻底去除黑色遮挡背景 */
+        background: transparent !important; /* 彻底移除黑色边框遮挡 */
         box-sizing: border-box;
         z-index: 9999;
-        pointer-events: none; /* 让两侧透明空白区域不挡住页面点击与滑动 */
+        pointer-events: none !important; /* 🌟 核心：允许鼠标事件完全穿透状态栏，直接操作底下的网页元素 */
     }
 
-    /* 3. 700px 限制容器 */
+    /* 3. 图片容器 */
     .footer-photo-wrapper {
         width: 700px;
         max-width: 90vw;
         margin: 0 auto;
         display: block;
-        pointer-events: auto; /* 图片本身保留响应 */
+        pointer-events: none; /* 图片区域同样保持穿透 */
+    }
+
+    /* 4. 保留兼容：如果以后在底部栏加入了链接 (a) 或按钮 (button)，会自动恢复点击点击 */
+    #footer a,
+    #footer button {
+        pointer-events: auto !important;
     }
 
     .footer-photo {
