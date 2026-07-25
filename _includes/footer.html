@@ -1,11 +1,10 @@
 <!-- ==========================================================
-    ✟ FOOTER COMPONENT ✟
+    ✟ FOOTER COMPONENT (CENTERED 800PX PHOTO) ✟
     ========================================================== -->
 
 <footer id="footer">
     <div class="footer-photo-wrapper">
-        <!-- 同时提供 Jekyll 绝对路径与相对路径的双保险 -->
-        <img src="{{ site.baseurl }}/images/dao.png" alt="DAO" class="footer-photo">
+        <img src="{{ '/images/dao.png' | relative_url }}" alt="DAO" class="footer-photo">
     </div>
 </footer>
 
@@ -18,17 +17,18 @@
         padding: 40px 0 80px 0;
         background: #000;
         box-sizing: border-box;
-        margin-top: 50px; /* 强制与上方元素拉开距离 */
         position: relative;
         z-index: 10;
+        margin-top: 40px;
     }
 
+    /* 限制 800px 居中容器 */
     .footer-photo-wrapper {
         width: 800px;
         max-width: 90vw;
         margin: 0 auto;
         display: block;
-        min-height: 50px; /* 即使图片缺失，也强制占位保证能看见 */
+        box-sizing: border-box;
     }
 
     .footer-photo {
