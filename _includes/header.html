@@ -20,7 +20,7 @@
 
     <nav id="dropdown-menu">
         <div class="menu-links">
-            <!-- 🛒 商店链接已更新 -->
+            <!-- 🛒 商店链接 -->
             <span class="menu-item" onclick="window.location.href='https://andseethingsasido.github.io/and666/'">商店</span>
             <span class="menu-item" onclick="openWeChatCard()">公众号</span>
         </div>
@@ -37,9 +37,16 @@
         
         <div class="modal-title">Contact</div>
         
-        <!-- 二维码图片：已替换为线上绝对路径，彻底解决碎图 -->
+        <!-- 二维码图片 -->
         <img src="https://andseethingsasido.github.io/images/gozhonghao.jpg" alt="gozhonghao" class="qrcode-img" id="modalQrcodeImg">
     </div>
+</div>
+
+<!-- ==========================================================
+    ✟ 底部居中图片组件 ✟
+    ========================================================== -->
+<div class="bottom-dao-wrapper">
+    <img src="images/dao.png" alt="dao" class="bottom-dao-img">
 </div>
 
 <!-- 2. 样式层 (CSS) -->
@@ -207,6 +214,24 @@
         user-select: none;
     }
     .close-btn:hover { color: #000000; }
+
+    /* ------------------- 底部居中图片样式 ------------------- */
+    .bottom-dao-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 0 20px 0;
+        box-sizing: border-box;
+    }
+
+    .bottom-dao-img {
+        width: 900px;
+        max-width: 95vw; /* 适应小屏幕自适应缩小，防止水平溢出 */
+        height: auto;
+        display: block;
+        object-fit: contain;
+    }
 
     /* 响应式断点 */
     @media (max-width: 768px) {
