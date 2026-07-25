@@ -32,7 +32,6 @@
 <!-- 独立弹窗组件：公众号遮罩层 -->
 <div class="modal-overlay" id="qrcodeModal">
     <div class="modal-content">
-        <span class="close-btn" id="closeTrigger">&times;</span>
         <div class="modal-title">Contact</div>
         <img src="{{ '/images/gozhonghao.jpg' | relative_url }}" alt="gozhonghao" class="qrcode-img" id="modalQrcodeImg">
     </div>
@@ -198,18 +197,6 @@
         filter: none !important; 
     }
 
-    .close-btn {
-        position: absolute;
-        top: 15px;
-        right: 20px;
-        font-size: 22px;
-        color: #999999;
-        cursor: pointer;
-        transition: color 0.3s ease;
-        user-select: none;
-    }
-    .close-btn:hover { color: #000000; }
-
     @media (max-width: 768px) {
         #header { height: 40px; padding: 0 20px; }
         .logo-btn { height: 20px; } 
@@ -234,7 +221,6 @@
     const menu = document.getElementById('dropdown-menu');
     const logo = document.getElementById('headerLogoBtn');
     const modal = document.getElementById('qrcodeModal');
-    const closeBtn = document.getElementById('closeTrigger');
 
     let isHoveringTrigger = false;
     let isHoveringMenu = false;
@@ -303,7 +289,6 @@
         }
     }
 
-    if (closeBtn) closeBtn.addEventListener('click', handleModalClose);
     if (modal) {
         modal.addEventListener('click', (e) => { if (e.target === modal) handleModalClose(); });
     }
