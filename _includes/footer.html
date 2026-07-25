@@ -1,11 +1,11 @@
 <!-- ==========================================================
-    ✟ FOOTER COMPONENT (PURE PHOTO) ✟
+    ✟ FOOTER COMPONENT ✟
     ========================================================== -->
 
 <footer id="footer">
-    <!-- 块级 Wrapper 容器：彻底解决 Flex 布局下 img 高度塌陷为 0px 的 Bug -->
     <div class="footer-photo-wrapper">
-        <img src="{{ '/images/dao.png' | relative_url }}" alt="DAO" class="footer-photo">
+        <!-- 同时提供 Jekyll 绝对路径与相对路径的双保险 -->
+        <img src="{{ site.baseurl }}/images/dao.png" alt="DAO" class="footer-photo">
     </div>
 </footer>
 
@@ -18,17 +18,17 @@
         padding: 40px 0 80px 0;
         background: #000;
         box-sizing: border-box;
+        margin-top: 50px; /* 强制与上方元素拉开距离 */
         position: relative;
-        z-index: 1; /* 赋予基础层级，防止被上方元素截断 */
+        z-index: 10;
     }
 
-    /* 块级包裹层：控制宽度并消除高度坍塌 */
     .footer-photo-wrapper {
         width: 800px;
-        max-width: 90vw; /* 移动端自适应 */
+        max-width: 90vw;
         margin: 0 auto;
         display: block;
-        line-height: 0; /* 消除 img 底部默认 3px 缝隙 */
+        min-height: 50px; /* 即使图片缺失，也强制占位保证能看见 */
     }
 
     .footer-photo {
@@ -36,6 +36,7 @@
         height: auto;
         display: block;
         object-fit: contain;
+        margin: 0 auto;
         user-select: none;
         -webkit-user-drag: none;
     }
