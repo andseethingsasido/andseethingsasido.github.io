@@ -27,14 +27,8 @@ img { user-select: none; -webkit-user-drag: none; }
 #gifTop { width: 80%; max-width: 900px; border-radius: 6px; box-shadow: 0 0 20px rgba(255,255,255,.12); margin: 12px 0; }
 #gifBottom { max-width: 80%; max-height: 45vh; border-radius: 6px; box-shadow: 0 0 20px rgba(255,255,255,.12); margin: 12px 0; cursor: pointer; }
 
-/* 📱 移动端尺寸 */
-@media (max-width: 768px) {
-    body { padding-top: 55px; }
-}
-
-/* 💻 PC 端尺寸 */
+/* PC 端图片比例微调 */
 @media (min-width: 769px) {
-    body { padding-top: 80px; }
     #gifTop { width: 53%; max-width: 600px; }
 }
 
@@ -67,7 +61,7 @@ img { user-select: none; -webkit-user-drag: none; }
 </head>
 <body>
 
-<!-- 顶部导航栏及公众号弹窗组件 -->
+<!-- 顶部导航组件（自带内边距防遮挡） -->
 {% include header.html %}
 
 <img id="gifTop" src="{{ '/and666.gif' | relative_url }}">
@@ -82,7 +76,7 @@ img { user-select: none; -webkit-user-drag: none; }
     <div class="brand-tag">F</div>
 </div>
 
-<!-- 独立底栏组件（自带透明背景 + 自动防遮挡边距） -->
+<!-- 底部导航组件（自带内边距防遮挡） -->
 {% include footer.html %}
 
 <script>
