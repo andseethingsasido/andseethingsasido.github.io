@@ -1,10 +1,12 @@
 <!-- ==========================================================
-    ✟ FOOTER PHOTO COMPONENT ✟
+    ✟ FOOTER COMPONENT (PURE PHOTO) ✟
     ========================================================== -->
 
 <footer id="footer">
-    <!-- 如果图片放在 images 文件夹内，使用此路径；若放在根目录，请看下方提示 -->
-    <img src="{{ '/images/dao.png' | relative_url }}" alt="DAO" class="footer-photo">
+    <!-- 块级 Wrapper 容器：彻底解决 Flex 布局下 img 高度塌陷为 0px 的 Bug -->
+    <div class="footer-photo-wrapper">
+        <img src="{{ '/images/dao.png' | relative_url }}" alt="DAO" class="footer-photo">
+    </div>
 </footer>
 
 <style>
@@ -13,14 +15,24 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 20px 0 60px 0;
+        padding: 40px 0 80px 0;
         background: #000;
         box-sizing: border-box;
+        position: relative;
+        z-index: 1; /* 赋予基础层级，防止被上方元素截断 */
+    }
+
+    /* 块级包裹层：控制宽度并消除高度坍塌 */
+    .footer-photo-wrapper {
+        width: 800px;
+        max-width: 90vw; /* 移动端自适应 */
+        margin: 0 auto;
+        display: block;
+        line-height: 0; /* 消除 img 底部默认 3px 缝隙 */
     }
 
     .footer-photo {
-        width: 800px;
-        max-width: 90vw; /* 移动端自动等比缩放，防止超出屏幕 */
+        width: 100%;
         height: auto;
         display: block;
         object-fit: contain;
