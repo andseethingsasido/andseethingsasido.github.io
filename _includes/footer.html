@@ -1,5 +1,5 @@
 <!-- ==========================================================
-    ✟ FIXED BOTTOM NAVIGATION COMPONENT (700PX PHOTO) ✟
+    ✟ FIXED BOTTOM NAVIGATION COMPONENT (TRANSPARENT PNG) ✟
     ========================================================== -->
 
 <footer id="footer">
@@ -9,26 +9,37 @@
 </footer>
 
 <style>
+    /* 1. 给页面增加底部安全距离，防止下方文字被图片遮挡 */
+    @media (max-width: 768px) {
+        body { padding-bottom: 90px !important; }
+    }
+    @media (min-width: 769px) {
+        body { padding-bottom: 120px !important; }
+    }
+
+    /* 2. 悬浮底部容器：完全透明背景 + 穿透点击 */
     #footer {
-        position: fixed;     /* 悬浮固定 */
-        bottom: 0;           /* 紧贴屏幕底部 */
+        position: fixed;
+        bottom: 0;
         left: 0;
         width: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 15px 0;    /* 适度缩小上下边距，避免占用过多屏幕空间 */
-        background: #000;    /* 纯黑背景遮挡下方滚过的文字内容 */
+        padding: 15px 0;
+        background: transparent !important; /* 彻底去除黑色遮挡背景 */
         box-sizing: border-box;
-        z-index: 9999;       /* 保证浮在普通内容上方，低于 Header 弹窗 */
+        z-index: 9999;
+        pointer-events: none; /* 让两侧透明空白区域不挡住页面点击与滑动 */
     }
 
-    /* 缩小 100px：由 800px 改为 700px */
+    /* 3. 700px 限制容器 */
     .footer-photo-wrapper {
         width: 700px;
-        max-width: 90vw;    /* 移动端自适应 */
+        max-width: 90vw;
         margin: 0 auto;
         display: block;
+        pointer-events: auto; /* 图片本身保留响应 */
     }
 
     .footer-photo {
