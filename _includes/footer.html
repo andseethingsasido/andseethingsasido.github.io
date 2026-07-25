@@ -1,0 +1,108 @@
+<!-- ==========================================================
+    ✟ GOTHIC LUXURY FOOTER & BOTTOM NAVIGATION ✟
+    ========================================================== -->
+
+<!-- 1. 结构层 (HTML) -->
+<footer id="footer">
+    <!-- 底部照片展示区（可按需增减图片或修改路径） -->
+    <div class="footer-photo-container">
+        <img src="{{ '/images/dao.png' | relative_url }}" alt="Bottom Image" class="footer-photo">
+    </div>
+
+    <!-- 底部导航菜单 -->
+    <nav class="footer-nav">
+        <a href="{{ '/' | relative_url }}" class="footer-link">HOME</a>
+        <span class="footer-divider">/</span>
+        <a href="https://andseethingsasido.github.io/and666/" class="footer-link">SHOP</a>
+        <span class="footer-divider">/</span>
+        <a href="javascript:void(0)" class="footer-link" onclick="openWeChatCard()">CONTACT</a>
+    </nav>
+
+    <!-- 版权声明/标语 -->
+    <div class="footer-copyright">
+        &copy; AND SEETHINGS AS I DO. ALL RIGHTS RESERVED.
+    </div>
+</footer>
+
+<!-- 2. 样式层 (CSS) -->
+<style>
+    #footer {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 0 60px 0;
+        background: #000;
+        box-sizing: border-box;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        margin-top: auto; /* 保证在页面内容不足时也能贴紧底部 */
+    }
+
+    /* 照片样式 */
+    .footer-photo-container {
+        width: 80%;
+        max-width: 900px;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 30px;
+    }
+
+    .footer-photo {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: contain;
+        user-select: none;
+        -webkit-user-drag: none;
+    }
+
+    /* 底部导航链接样式 */
+    .footer-nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .footer-link {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.25em;
+        color: #888;
+        text-decoration: none;
+        text-transform: uppercase;
+        transition: color 0.3s ease;
+    }
+
+    .footer-link:hover {
+        color: #fff;
+    }
+
+    .footer-divider {
+        color: #333;
+        font-size: 12px;
+    }
+
+    /* 版权文字样式 */
+    .footer-copyright {
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        color: #444;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    /* 响应式适配 */
+    @media (max-width: 768px) {
+        #footer {
+            padding: 30px 20px 40px 20px;
+        }
+        .footer-link {
+            font-size: 11px;
+            letter-spacing: 0.2em;
+        }
+    }
+</style>
