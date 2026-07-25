@@ -49,10 +49,10 @@
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        z-index: 1000010 !important; /* 强制最高层级，保证 LOGO 反色置顶 */
+        z-index: 1000010 !important;
         box-sizing: border-box;
         padding: 0 40px;
-        pointer-events: none; /* 让透明 Header 区域点击穿透 */
+        pointer-events: none;
     }
 
     .logo-btn {
@@ -142,12 +142,14 @@
         align-items: center;
         z-index: 999999 !important;
         opacity: 0;
+        visibility: hidden; /* 彻底物理隐藏遮罩，防止阻挡底部渲染 */
         pointer-events: none;
-        transition: opacity 0.3s ease;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
     }
 
     .modal-overlay.active {
         opacity: 1;
+        visibility: visible; /* 激活时显示 */
         pointer-events: auto;
     }
 
